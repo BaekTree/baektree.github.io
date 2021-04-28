@@ -74,7 +74,7 @@ $$
 
 $$
 
-### $\frac{\partial \mathcal{L}}{\partial z} = \delta^{[L]} : (1 \times 1)\\$
+### $\frac{\partial \mathcal{L}}{\partial z} = \delta^{[L]} : (1 \times 1)$
 
 
 $$
@@ -100,15 +100,12 @@ $$
 
 # layer $l$
 * $1 \le l \lt L : z^{[l]} \in R^{m_l \times 1}, W^{[l]} \in R^{m_l \times m_{l-1}}, a^{[l-1]} \in R^{m_{l-1} \times 1}, b \in R^{m_l \times 1}$
-* $z^{[l]}  = W^{[l]} \cdot a^{[l-1]} + b^{[l]}\\$
-* $a^{[l]}  = g(z^{[l]})\\$
+* $z^{[l]}  = W^{[l]} \cdot a^{[l-1]} + b^{[l]}$
+* $a^{[l]}  = g(z^{[l]})$
 ## $\frac{\partial \mathcal{L}}{\partial W^{[l]}} = \frac{\partial \mathcal{L}}{\partial z^{[l]}}  \cdot (a^{[l-1]})^T$
 
 $$
     \begin{aligned}
-        
-        \\
-
         \frac{\partial \mathcal{L}}{\partial W^{[l]}_{ij}} & : (1 \times 1)\\
         \frac{\partial \mathcal{L}}{\partial W^{[l]}_{ij}} & = \underbrace{\frac{\partial \mathcal{L}}{\partial z^{[l]}_i}}_{1 \times 1} \underbrace{\frac{\partial z^{[l]}_i}{\partial W^{[l]}_{ij}}}_{1 \times 1}\\
         & = \frac{\partial \mathcal{L}}{\partial z^{[l]}_i} (a_j^{[l-1]})\\
@@ -147,14 +144,14 @@ $$
         & = <\delta^l , (a^{[l-1]})^T> [\because \text{ $(a^{[l-1]})^T$ is a vector.}]\\
         & = \delta^l \cdot (a^{[l-1]})^T\\
         & = \frac{\partial \mathcal{L}}{\partial z^{[l]}}  \cdot (a^{[l-1]})^T\\
-
     \end{aligned}
 
 $$
+
 ---
 
 ## $\frac{\partial \mathcal{L}}{\partial z^{[l]}} = \frac{\partial \mathcal{L}}{\partial a^{[l]}} *  a'^{[l]}(z^{[l]})$
-* $a^{[l]}  = g(z^{[l]})\\$
+* $a^{[l]}  = g(z^{[l]})$
 $$
     \begin{aligned}
         \\
@@ -187,8 +184,8 @@ $$
 
 ---
 ##  $\frac{\partial \mathcal{L}}{\partial a^{[l]}} = {W^{[l]}}^T \cdot \delta^{[l+1]}$
-* $z^{[l]}  = W^{[l]} \cdot a^{[l-1]} + b^{[l]}\\$
-* $z^{[l+1]}  = W^{[l+1]} \cdot a^{[l]} + b^{[l+1]}\\$
+* $z^{[l]}  = W^{[l]} \cdot a^{[l-1]} + b^{[l]}$
+* $z^{[l+1]}  = W^{[l+1]} \cdot a^{[l]} + b^{[l+1]}$
 
 $$
         \begin{aligned}
@@ -227,8 +224,8 @@ $$
 ## summing up : 
 $z^{[l]} \in R^{m_l \times 1}, a^{[l]} \in R^{m_l \times 1},W^{[l]} \in R^{m_l \times m_{l-1}}, a^{[l-1]} \in R^{m_{l-1} \times 1}, b \in R^{m_l \times 1}$
 
-$z^{[l]} = W^{[l]} \cdot a^{l-1} + b^{[l]}\\$
-$a^{[l]} = g(z^{[l]}) \text{where g is element wise function. }\\$
+$z^{[l]} = W^{[l]} \cdot a^{l-1} + b^{[l]}$
+$a^{[l]} = g(z^{[l]}) \text{where g is element wise function. }$
 
 $\frac{\partial \mathcal{L}}{\partial W^{[l]}} = \frac{\partial \mathcal{L}}{\partial z^{[l]}}  \cdot (a^{[l-1]})^T$ (eq1)
 
