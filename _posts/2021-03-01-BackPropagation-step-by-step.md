@@ -1,55 +1,78 @@
-# vector-derivative
-* 쉽게 쉽게 모든 단계
-* notation
+---
+title: "BackPropagation-step-by-step"
+date: 2021-03-01T15:34:30-04:00
+categories:
+  - blog
+tags:
+  - Jekyll
+  - update
+---
+
+호옥시 back propagation의 계산 과정이 진짜로 우리가 알고 있는 그대로 나오는지 궁금해서 한번 모든 과정을 나타내보았어요.
+
+notaion은 Andrew Ng의 Courserg, CS229, CS230을 따랐어요! 딥러닝의 BackProgation의 모든 과정을 한걸음 한걸음 적었습니다. 벡터 미분의 다양한 방법들 중에서 index을 사용해서 진행했고, 모든 과정에서 특별한 언급이 없으면 denumerator convention을 따랐습니다. 
+
+파라미터들의 모양을 상상하면서 따라오면 쉬워요.
+
+
+## notation
   * W의 경우 $W_i$은 row vector을 의미하고, 그외 다른 벡터 $v$의 경우 $v_i$은 element을 의미
   * output을 만나는 마지막 layer은 $L$, 처음 layer은 $1$, 그 중간 layer들은 $l$으로 표기.
 
 
-* network
-
-$$
-    \begin{aligned}
-        & \text{ layer 1} : z^{[1]}  \in R^{m_1 \times 1}, W^{[1]} \in R^{m_1 \times n}, X \in R^{n \times m}, a \in R^{m_1 \times 1}, b \in R^{m_1 \times 1}\\
-        & z^{[1]} = W^{[1]} \cdot X + b^{[1]}\\
-        & a^{[1]} = g(z^{[1]})\\
-        
-        \\
-
-        & \text{ layer $l$ where } 1 \lt l \lt L : \\
-        & z^{[l]} \in R^{m_l \times 1}, a^{[l]} \in R^{m_l \times 1},W^{[l]} \in R^{m_l \times m_{l-1}}, a^{[l-1]} \in R^{m_{l-1} \times 1}, b \in R^{m_l \times 1}\\
-
-        & z^{[l]} = W^{[l]} \cdot a^{l-1} + b^{[l]}\\
-        & a^{[l]} = g(z^{[l]}) \text{where g is element wise function. }\\
-
-
-        \\
-        & \text{ layer $L$ : } z \in R^{1 \times 1}, W^{[L]} \in R^{1 \times m_{L-1}}, a \in R^{1 \times 1}, b \in R^{1 \times 1}\\
-        & z^{[L]} = W^{[L]} \cdot a^{[L-1]} + b^{[L]}\\
-        & a^{[L]} = g(z^{[L]})\\
-        & o = a^{[L]}\\
-        & \mathcal{L} = \mathcal{L}(o)\\
-    \end{aligned}
-$$
-
-
-* cost function
-
-$$
-J = \frac 1 m \sum \mathcal{L}^{(i)}
-$$
-
-* parameters
+## parameters
 
 $$
     W^{[l]}, b^{[l]}, \text{for } 1 \le l \le L.
 $$
 
-* gradient
+## network
+layer 1 with $z^{[1]}  \in R^{m_1 \times 1}, W^{[1]} \in R^{m_1 \times n}, X \in R^{n \times m}, a \in R^{m_1 \times 1}, b \in R^{m_1 \times 1}$
+
+$$
+         z^{[1]} = W^{[1]} \cdot X + b^{[1]}\\
+         a^{[1]} = g(z^{[1]})\\
+$$
+
+
+
+layer $l$ , $1 \lt l \lt L$ with $z^{[l]} \in R^{m_l \times 1}, a^{[l]} \in R^{m_l \times 1},W^{[l]} \in R^{m_l \times m_{l-1}}, a^{[l-1]} \in R^{m_{l-1} \times 1}, b \in R^{m_l \times 1}$
+
+$$
+         z^{[l]} = W^{[l]} \cdot a^{l-1} + b^{[l]}\\
+         a^{[l]} = g(z^{[l]}) \text{ where g is element wise function. }\\
+$$
+
+layer $L$ with $z \in R^{1 \times 1}, W^{[L]} \in R^{1 \times m_{L-1}}, a \in R^{1 \times 1}, b \in R^{1 \times 1}$
+
+$$
+         z^{[L]} = W^{[L]} \cdot a^{[L-1]} + b^{[L]}\\
+         a^{[L]} = g(z^{[L]})\\
+         o = a^{[L]}\\
+         \mathcal{L} = \mathcal{L}(o)\\
+$$
+
+
+
+
+## cost function
+
+$$
+J = \frac 1 m \sum \mathcal{L}^{(i)}
+$$
+
+실제 Back Propagation의 과정을 차근 차근 살펴보아요.
 
 # layer $L$ 
-* $z \in R^{1 \times 1}, W^{[L]} \in R^{1 \times m_{L-1}}, a \in R^{1 \times 1}, a^{[L-1]} \in R^{m_{l-1} \times 1}, b \in R^{1 \times 1}$
+변수와 파라미터 : $z \in R^{1 \times 1}, W^{[L]} \in R^{1 \times m_{L-1}}, a \in R^{1 \times 1}, a^{[L-1]} \in R^{m_{l-1} \times 1}, b \in R^{1 \times 1}$
 
-### $\frac{\partial \mathcal{L}}{\partial W^{[L]}} = \delta^{[L]} \cdot (a^{[L-1]})^T :  (1 \times m_{L-1})$
+## $\frac{\partial \mathcal{L}}{\partial W^{[L]}}$
+
+$$
+\frac{\partial \mathcal{L}}{\partial W^{[L]}} = \underbrace{\delta^{[L]} \cdot (a^{[L-1]})^T}_{1 \times m_{L-1}}
+$$
+
+1개의 element에 대해서
 
 $$
     \begin{aligned}
@@ -59,7 +82,14 @@ $$
         \frac{\partial \mathcal{L}}{\partial W^{[L]}_i} & = \underbrace{\frac{\partial \mathcal{L}}{\partial z}}_{1 \times 1} \underbrace{\frac{\partial z}{\partial W^{[L]}_i}}_{1 \times 1}\\
         & = \delta^{[L]} \cdot a^{[L-1]}_i\\
         \\
+    \end{aligned}
 
+$$
+
+벡터에 대해서
+
+$$
+    \begin{aligned}
         \frac{\partial \mathcal{L}}{\partial W^{[L]}} & : (1 \times m_{L-1})\\
         \frac{\partial \mathcal{L}}{\partial W^{[L]}} & = \underbrace{\frac{\partial \mathcal{L}}{\partial z}}_{1 \times 1} \underbrace{\frac{\partial z}{\partial W^{[L]}}}_{1 \times m_{l-1}}\\
         & = \begin{bmatrix}
@@ -74,7 +104,7 @@ $$
 
 $$
 
-### $\frac{\partial \mathcal{L}}{\partial z} = \delta^{[L]} : (1 \times 1)$
+## $\frac{\partial \mathcal{L}}{\partial z} = \delta^{[L]} : (1 \times 1)$
 
 
 $$
@@ -87,7 +117,7 @@ $$
 
 $$
 
-### $\frac{\partial \mathcal{L}}{\partial b^{[L]}}$
+## $\frac{\partial \mathcal{L}}{\partial b^{[L]}}$
 
 $$
         \\
@@ -102,7 +132,10 @@ $$
 * $1 \le l \lt L : z^{[l]} \in R^{m_l \times 1}, W^{[l]} \in R^{m_l \times m_{l-1}}, a^{[l-1]} \in R^{m_{l-1} \times 1}, b \in R^{m_l \times 1}$
 * $z^{[l]}  = W^{[l]} \cdot a^{[l-1]} + b^{[l]}$
 * $a^{[l]}  = g(z^{[l]})$
+
 ## $\frac{\partial \mathcal{L}}{\partial W^{[l]}} = \frac{\partial \mathcal{L}}{\partial z^{[l]}}  \cdot (a^{[l-1]})^T$
+
+개별 element에 대해서
 
 $$
     \begin{aligned}
@@ -110,6 +143,14 @@ $$
         \frac{\partial \mathcal{L}}{\partial W^{[l]}_{ij}} & = \underbrace{\frac{\partial \mathcal{L}}{\partial z^{[l]}_i}}_{1 \times 1} \underbrace{\frac{\partial z^{[l]}_i}{\partial W^{[l]}_{ij}}}_{1 \times 1}\\
         & = \frac{\partial \mathcal{L}}{\partial z^{[l]}_i} (a_j^{[l-1]})\\
         & = \delta^l_i \cdot (a_j^{[l-1]})\\
+    \end{aligned}\\
+$$
+
+벡터에 대해서
+
+$$
+    \begin{aligned}
+
 
         \\
         \frac{\partial \mathcal{L}}{\partial W^{[l]}_{i}} & : (1 \times m_{l-1})\\
@@ -124,6 +165,15 @@ $$
          & = \underbrace{\frac{\partial \mathcal{L}}{\partial z^{[l]}_i}}_{1 \times 1} \cdot \underbrace{(a^{[l-1]})^T}_{1 \times m_{l-1}}\\
         & = \delta^l_i \cdot (a^{[l-1]})^T\\
 
+
+    \end{aligned}\\
+
+$$
+
+matrix에 대해서
+
+$$
+    \begin{aligned}
         \\
         \frac{\partial \mathcal{L}}{\partial W^{[l]}} & : (m_l \times m_{l-1})\\
         \frac{\partial \mathcal{L}}{\partial W^{[l]}} & = \begin{bmatrix}
@@ -144,14 +194,16 @@ $$
         & = <\delta^l , (a^{[l-1]})^T> [\because \text{ $(a^{[l-1]})^T$ is a vector.}]\\
         & = \delta^l \cdot (a^{[l-1]})^T\\
         & = \frac{\partial \mathcal{L}}{\partial z^{[l]}}  \cdot (a^{[l-1]})^T\\
-    \end{aligned}
+    \end{aligned}\\
 
 $$
 
----
-
 ## $\frac{\partial \mathcal{L}}{\partial z^{[l]}} = \frac{\partial \mathcal{L}}{\partial a^{[l]}} *  a'^{[l]}(z^{[l]})$
+
 * $a^{[l]}  = g(z^{[l]})$
+
+element으로 미분
+
 $$
     \begin{aligned}
         \\
@@ -159,6 +211,13 @@ $$
         & = \underbrace{\frac{\partial \mathcal{L}}{\partial a^{[l]}_i}}_{1 \times 1} \underbrace{\frac{\partial a^{[l]}_i }{\partial z^{[l]}_i}}_{1 \times 1}\\
         & =\frac{\partial \mathcal{L}}{\partial a^{[l]}_i} \cdot a'^{[l]}_i(z_i^{[l]}) \\
 
+        \end{aligned}\\
+$$
+
+벡터로 미분
+
+$$
+    \begin{aligned}
         \\
         \frac{\partial \mathcal{L}}{\partial z^{[l]}} & = \delta^l : (m_l \times 1)\\
         \frac{\partial \mathcal{L}}{\partial z^{[l]}} & = \begin{bmatrix}
@@ -182,11 +241,13 @@ $$
         \end{aligned}
 $$
 
----
+
 
 ##  $\frac{\partial \mathcal{L}}{\partial a^{[l]}} = {W^{[l]}}^T \cdot \delta^{[l+1]}$
 * $z^{[l]}  = W^{[l]} \cdot a^{[l-1]} + b^{[l]}$
 * $z^{[l+1]}  = W^{[l+1]} \cdot a^{[l]} + b^{[l+1]}$
+
+element으로 미분
 
 $$
         \begin{aligned}
@@ -194,10 +255,17 @@ $$
         \\
         \frac{\partial \mathcal{L}}{\partial a^{[l]}_i} & : (1 \times 1)\\
         \frac{\partial \mathcal{L}}{\partial a^{[l]}_i} & = \underbrace{\frac{\partial z^{[l+1]}}{\partial a^{[l]}_i}}_{1 \times m_{l+1}} \cdot  \underbrace{\frac{\partial \mathcal{L}}{\partial z^{[l+1]}}}_{m_{l+1} \times 1}\\
-        & \text{ denumerator formation이고 denumerator가 scalar이므로 shape 맞춰주기 위해 $z^{[l+1]}$을 transpose 가능.} \\
-        & = {W^{[l]}}^T_i \cdot \delta^{[l+1]}\\
-        & \text{$a_i$가 각 unit에 $W_{i1}$}와 내적.\\
 
+
+        \end{aligned}\\
+$$
+
+denumerator formation이고 denumerator가 scalar이므로 shape 맞춰주기 위해 $z^{[l+1]}$을 transpose. ${W^{[l]}}^{T}_{i} \cdot \delta^{[l+1]}$에서 $a_i$가 각 unit에 $W$의 jth column과 내적
+
+벡터로 미분
+
+$$
+    \begin{aligned}
         \\
         \frac{\partial \mathcal{L}}{\partial a^{[l]}} & : (m_l \times 1)\\
         \frac{\partial \mathcal{L}}{\partial a^{[l]}_i} & = \begin{bmatrix}
@@ -313,7 +381,8 @@ V의 차원이 (..., m)으로 유지되면서 J까지 feed forward 된다. 각 e
 ## $\mathcal{L} \in R^{m} = [\mathcal{L^{(1)}}, \cdots, \mathcal{L^{(i)}}, \cdots \mathcal{L^{(m)}}]$
 
 # Back Propagation of m examples.
-$z^{[l]} \in R^{m_l \times m}, a^{[l]} \in R^{m_l \times m},W^{[l]} \in R^{m_l \times m_{l-1}}, a^{[l-1]} \in R^{m_{l-1} \times m}, b \in R^{m_l \times m}$
+
+$Z^{[l]} \in R^{m_l \times m}, A^{[l]} \in R^{m_l \times m},W^{[l]} \in R^{m_l \times m_{l-1}}, A^{[l-1]} \in R^{m_{l-1} \times m}, b \in R^{m_l \times m}$
 
 
 
@@ -390,20 +459,22 @@ $$
 * single example : $\frac{\partial \mathcal{L}}{\partial W^{[l]}}$
 
 $$
-\frac{\partial \mathcal{L}}{\partial W^{[l]}} = \underbrace{\frac{\partial \mathcal{L}}{\partial z^{[l]}}}_{m_l \times 1}  \cdot \underbrace{(a^{[l-1]})^T}_{1 \times m_{l-1} }\\
-\\
-\frac{\partial J}{\partial W^{[l]}} = \underbrace{\frac{\partial J}{\partial z^{[l]}}}_{m_l \times m}  \cdot \underbrace{(A^{[l-1]})^T}_{m \times m_{l-1} }\\
-
 
 \begin{aligned}
     
-  \frac{\partial J}{\partial W^{[l]}_{ij}} & = \frac{\partial J}{\partial z_k} \frac{\partial z_i}{\partial W_{ij}}\\ 
+  \frac{\partial \mathcal{L}}{\partial W^{[l]}_{ij}} & = \frac{\partial \mathcal{L}}{\partial z_k} \frac{\partial z_i}{\partial W_{ij}}\\ 
   & = \underbrace{\delta_i}_{1 \times m} \cdot \underbrace{(a_i)^T}_{m \times 1}\\
-\end{aligned}
+\end{aligned}\\
+
+\frac{\partial \mathcal{L}}{\partial W^{[l]}} = \underbrace{\frac{\partial \mathcal{L}}{\partial z^{[l]}}}_{m_l \times 1}  \cdot \underbrace{(a^{[l-1]})^T}_{1 \times m_{l-1} }\\
+
+
 
 
 $$
+
 * m examples
+
 $$
     \begin{aligned}
         
@@ -455,7 +526,8 @@ $$
     & \therefore \frac{\partial J}{\partial W} =\frac 1 m\sum_k^m \frac{\partial \mathcal{L}^k}{\partial W}\\
     \\
     & \text{$\frac{\partial \mathcal{L}}{\partial W}  =  \frac{\partial \mathcal{L}}{\partial Z^{[l]}}  \cdot \frac{\partial Z^{[l]}}{\partial W}(eq5)$을 사용하여 내적으로 명시적인 summation을 없앤다. eq4 사용.}\\
-    & \frac{\partial \mathcal{L}}{\partial Z^{[l]}} = \sum_k \frac{\partial \mathcal{L}^k}{\partial Z^{[l]}} (eq4)\\
+    \\
+    & \frac{\partial \mathcal{J}}{\partial Z^{[l]}} = \frac 1 m \sum_k \frac{\partial \mathcal{L}^k}{\partial Z^{[l]}} (eq4)\\
     \\
     & = \frac 1 m\sum^m_k \frac{\partial \mathcal{L}^k}{\partial Z} \frac{\partial Z}{\partial W}\\
     & = \frac 1 m\frac{\partial \mathcal{L}}{\partial Z} \frac{\partial Z}{\partial W}\\
@@ -470,7 +542,8 @@ $$
 
 ---
 
-## $\frac{\partial J}{\partial b^{[l]}}    = \frac 1 m\sum_i^m \frac{\partial \mathcal{L}^i}{\partial z} = \frac 1 m\sum_i^m \delta^{[l]}\\ \because \text{각 example의 layer l에서 b의 값은 동일.}$
+## $\frac{\partial J}{\partial b^{[l]}}    = \frac 1 m\sum_i^m \frac{\partial \mathcal{L}^i}{\partial z} = \frac 1 m\sum_i^m \delta^{[l]}$
+* 각 layer에서 모든 example에 대해 b의 값이 동일하다.
 * b의 경우 내적에 포함되지 않아서... 따로 sum을 해줘야 함...
 
 ---
