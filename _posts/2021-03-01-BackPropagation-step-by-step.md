@@ -2,10 +2,10 @@
 title: "BackPropagation-step-by-step"
 date: 2021-03-01T15:34:30-04:00
 categories:
-  - blog
+  - DeepLearning
 tags:
-  - Jekyll
-  - update
+  - DeepLearning
+  - BackPropagation
 ---
 
 호옥시 back propagation의 계산 과정이 진짜로 우리가 알고 있는 그대로 나오는지 궁금해서 한번 모든 과정을 나타내보았어요.
