@@ -183,6 +183,7 @@ $$
 $$
 
 ---
+
 ##  $\frac{\partial \mathcal{L}}{\partial a^{[l]}} = {W^{[l]}}^T \cdot \delta^{[l+1]}$
 * $z^{[l]}  = W^{[l]} \cdot a^{[l-1]} + b^{[l]}$
 * $z^{[l+1]}  = W^{[l+1]} \cdot a^{[l]} + b^{[l+1]}$
@@ -382,6 +383,7 @@ $$
 $$
 
 ---
+
 ## $\frac{\partial J}{\partial W^{[l]}} =\frac 1 m \frac{\partial \mathcal{L}}{\partial Z^{[l]}}  \cdot (A^{[l-1]})^T$
 * w의 경우 BPTT을 하면서 sum이 자동으로 포함되어 있음...
 
