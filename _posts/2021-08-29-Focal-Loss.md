@@ -1,5 +1,5 @@
 ---
-title: "0829-Focal-Loss"
+title: "08-29-Focal-Loss"
 last_modified_at: 2021-08-06T16:20:02-05:00
 categories:
   - Blog
