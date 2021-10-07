@@ -34,3 +34,8 @@ wandb.init(id="3fdn2tkl", resume="allow")
 기존에는 그냥 `trainer.train()` 이겠지만 argument으로 checkpoint가 있는 디렉토리 경로를 넣음.
 
 그리고 `python3 train.py`으로 실행하면... 기존의 epoch들은 스킵하고 지나감. 
+
+# 주의
+간혹 id을 잘못넣었거나 checkpoint 경로를 잘못넣거나 다른 곳에 넣으면 에러 뜨면서 안돌아감.
+ 
+ wandb init 되면서 wandb 디렉토리에 각 id 마다 폴더를 하나씩 만듬. 근데 resume 할때도 동일한 id의 폴더를 만듬. 실패하든 성공하든 만듬. 문제는... 공식 문서에서는 동일한 id가 있을 때는 unexpected result가 나온다고 함. 실패할 때는 알아서 폴더를 안만들면 참 조을텐데 ㅜㅜ 무튼 그래서 실패할 경우 wandb에서 해당 id에 대한 폴더를 삭제하는게 좋을 것 같다. 끗.
