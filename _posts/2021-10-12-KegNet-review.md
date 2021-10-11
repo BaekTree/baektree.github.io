@@ -10,5 +10,4 @@ tag:
   - NLP
 ---
 
-<!-- <a href="./assets/pdf/kagnet.pdf" target="_blank">PDF.</a> -->
-<a href="baektree.github.io/assets/pdf/kagnet.pdf" target="_blank">PDF.</a>
+<a href="//baektree.github.io/assets/pdf/kagnet.pdf" target="_blank">PDF.</a>
