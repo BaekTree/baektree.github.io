@@ -2,8 +2,10 @@
 title: "dataloader"
 last_modified_at: 2021-10-13T16:20:02-05:00
 categories:
-  - pytorch
+  - deep-learning
 tags:
+  - project
+  - pytorch
   - dataloader
 ---
 

@@ -2,8 +2,7 @@
 title: "0817-torch-breif"
 last_modified_at: 2021-08-17T16:20:02-05:00
 categories:
-  - Blog
-  - Camp
+  - boostcamp
 tags:
   - camp
 ---

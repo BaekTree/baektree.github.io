@@ -4,6 +4,5 @@ _site
 Gemfile.lock
 .DS_Store
 _posts/.DS_Store
-_posts/need_clean
 assets/images/.DS_Store
 assets/images/src/

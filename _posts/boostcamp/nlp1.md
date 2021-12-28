@@ -123,7 +123,7 @@ loss 함수 CE : $y_i\log \hat y_i$
 
 
 ## pytorch
-x에 1개, y에 window 1개. x에 1개, 다른 window 1개 이렇게 1개의 x에 대해서 다른 window을 하나씩 다 집어넣는다. get item에서 idx으로 1개 빼면 x 1개, window 1개 씩 빠진다. 
+x에 1개, y에 window 1개. x에 1개, 다른 window 1개 이렇게 1개의 x에 대해서 다른 window을 하나씩 다 집어넣는다. get item에서 idx으로 1개 빼면 x 1개, window 1개 씩 빠진다. 1개의 for 반복에서 windiw*2개의 index을 생성해서 잡어넣는 중
 ```
 class SkipGramDataset(Dataset):
   def __init__(self, train_tokenized, window_size=2):
@@ -176,6 +176,29 @@ class SkipGram(nn.Module):
 파이토치 nn embeding 함수 예시를 보면
 
 [1,2,3,4]가 들어가면 (4, hidden_dim)이 나온다. 그리고 one hot vector으로 안바꾸고 넣어도 안에서 바꿔서 계산하는 듯. 원핫벡터이기 때문에 1개가 들어가면 1, dim이 나온다. n개가 들어가면 one hot vector n개라서 n, dim의 hiddden output이 나온다. 그래서 cbow는 window*2개가 들어가서 win*2, dim개가 나옴. skip gram은 1개가 들어가서 1개가 나옴. 그런데 이 기준에서 배치 사이즈대로 들어가니까, skipgram은 (B, dim)가 hidden output으로 나옴. 그리고 linear(d_w, V) 거쳐서 (1,d_w)가 (1, V)개가 된다. 
+
+```
+skipgram.train()
+skipgram = skipgram.to(device)
+optim = torch.optim.SGD(skipgram.parameters(), lr=learning_rate)
+loss_function = nn.CrossEntropyLoss()
+
+for e in range(1, num_epochs+1):
+  print("#" * 50)
+  print(f"Epoch: {e}")
+  for batch in tqdm(skipgram_loader):
+    x, y = batch
+    x, y = x.to(device), y.to(device) # (B, W), (B)
+    output = skipgram(x)  # (B, V)
+
+    optim.zero_grad()
+    loss = loss_function(output, y)
+    loss.backward()
+    optim.step()
+  
+    print(f"Train loss: {loss.item()}")
+print("Finished.")
+```
 
 loss함수로 nn.CrossEntropy을 쓰는데 토치의 CE에는 softmax가 포함되어 있음. y_true인 실수 1개가 label으로 전달. output으로는 class 수 만한 probability vector 전달. y_true에 해당하는 prob만 살아서 CE 계산. 그런데 4개 배치가 같이 들어감. 그리고 같이 들어간 배치는 argument으로 옵션 주지 않으면 평균내서 반환 함. 
 

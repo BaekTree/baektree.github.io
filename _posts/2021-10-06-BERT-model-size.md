@@ -2,9 +2,12 @@
 title: "1006-BERT-model-size"
 last_modified_at: 2021-08-18T16:20:02-05:00
 categories:
-  - NLP
+  - nlp
+  - deep-learning
+tags:
   - Tokenizer
   - Preprocessing
+  - bert
 ---
 
 버트 모델 크기는 512이다. 이것보다 긴 문장이 들어가면?

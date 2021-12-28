@@ -2,7 +2,10 @@
 title: "2021-huggingface-trainer-resume-wandb"
 last_modified_at: 2021-08-18T16:20:02-05:00
 categories:
-  - NLP
+  - nlp
+  - deep-learning
+tags:
+  - project
   - Tokenizer
   - Preprocessing
 ---

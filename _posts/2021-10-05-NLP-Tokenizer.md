@@ -106,6 +106,7 @@ class Tokenizer():
 반환하는 함수들은 사실 BatchEncoding class의 instance을 반환한다. 이거 그냥 별거 없음. 그냥 python의 collection의 UserDict 상속해서 만든거임 ㅋㅋ . 여기에 그냥 인코딩한 정보들을 dict 형태로 넣은거. 그래서 attention mask, type id, 정수 인코딩 등등의 정보를 넣은게 전부! 
 
 반환하는 애들
+
 ```
 ["input_ids", "token_type_ids", "attention_mask"]
 ```

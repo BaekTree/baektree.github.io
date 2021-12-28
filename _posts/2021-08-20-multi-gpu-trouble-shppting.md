@@ -2,8 +2,7 @@
 title: "08-20-multi-gpu-trouble-shppting"
 last_modified_at: 2021-08-20T16:20:02-05:00
 categories:
-  - Blog
-  - Camp
+  - boostcamp
 tags:
   - camp
 ---

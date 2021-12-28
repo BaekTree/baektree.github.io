@@ -10,6 +10,22 @@ tags:
 
 python recap
 
+# eashdict
+dict인데 attribute으로 접근 가능!
+jupyter notebook 에서
+argparser 있는데
+에러
+ipykernel_launcher.py: error: unrecognized arguments
+
+```
+import easydict
+args = easydict.EasyDict({
+ 
+        "batchsize": 100,
+        ...
+})
+```
+
 # numpy
 * masking
 부등호 사용

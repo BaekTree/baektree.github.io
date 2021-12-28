@@ -2,8 +2,8 @@
 title: "Skim-RoBERTa"
 last_modified_at: 2021-10-12T16:20:02-05:00
 categories:
-  - NLP
-  - paper
+  - nlp
+  - paper-review
 tag:
   - RoBERTa
   - paper

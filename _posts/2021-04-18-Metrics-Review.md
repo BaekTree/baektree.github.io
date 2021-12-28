@@ -2,9 +2,10 @@
 title: "2021-04-18-Metrics-Review"
 date: 2021-04-18T15:34:30-04:00
 categories:
-  - machine learning
+  - machine-learning
+  - deep-learning
 tags:
-  - machine learning
+  - machine-learning
   - metric
 ---
 

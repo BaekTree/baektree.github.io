@@ -2,11 +2,149 @@
 title: "BackPropagation-step-by-step"
 date: 2021-03-01T15:34:30-04:00
 categories:
-  - DeepLearning
+  - deep-learning
 tags:
-  - DeepLearning
+  - deep-learning
   - BackPropagation
 ---
+
+# Stanford CS229 DNN
+## dW
+1개의 원소로 편미분.
+![](/assets/src/backprop/backprop1.png)
+
+W_i의 의미: i번째 z노드에 모든 x벡터가 weighted sum, 내적된다. 따라서 W_i으로 미분하면, $J \leftarrow z_i \leftarrow \text{ each } W_{ij}$의 벡터 표현이다. W_i는 row vector이므로,
+
+$$
+    \frac{\partial J}{\partial W_i} = [\cdots \frac{\partial J}{\partial z_i} \frac{\partial z_i}{\partial W_{ij}} \cdots ]\\
+    = [\cdots \frac{\partial J}{\partial z_i} x_j \cdots ]\\
+    = \frac{\partial J}{\partial z_i} \cdot x^T
+$$
+
+모든 W에 대해서 편미분하면, W_i에 대해서 편미분 값을 세로료 표현할 수 있다.
+
+$$
+    \begin{bmatrix}
+        \vdots\\
+        \frac{\partial J}{\partial W_i}\\
+        \vdots
+    \end{bmatrix} = 
+    \begin{bmatrix}
+        \vdots\\
+        \frac{\partial J}{\partial z_i} \cdot x^T\\
+        \vdots\\
+    \end{bmatrix} = 
+      \begin{bmatrix}
+        \vdots\\
+        \frac{\partial J}{\partial z_i} \\
+        \vdots\\
+    \end{bmatrix} \cdot x^T = \frac{\partial J}{\partial z} \cdot x^T 
+$$
+
+![](/assets/src/backprop/backprop2.png)
+
+
+## dZ
+1개의 노드 $z_i$
+$$
+    \frac{\partial J}{\partial z_i} = \frac{\partial J}{\partial a_i} \frac{\partial a_i}{\partial z_i}\\
+    = \frac{\partial J}{\partial a_i} \frac{\partial \sigma(z_i)}{\partial z_i}\\
+$$
+
+벡터 z는 column vector이다. 따라서 
+
+$$
+    \frac{\partial J}{\partial z} = \begin{bmatrix}
+        \vdots\\
+        \frac{\partial J}{\partial z_i}\\
+        \vdots\\
+    \end{bmatrix} = \begin{bmatrix}
+        \vdots\\
+        \frac{\partial J}{\partial a_i} \frac{\partial \sigma(z_i)}{\partial z_i}\\\\
+        \vdots\\        
+    \end{bmatrix} = \begin{bmatrix}
+        \vdots\\
+        \frac{\partial J}{\partial a_i}\\
+        \vdots\\
+    \end{bmatrix} * \begin{bmatrix}
+        \vdots\\
+        \frac{\partial \sigma(z_i)}{\partial z_i}\\
+        \vdots\\
+    \end{bmatrix} = \frac{\partial J}{\partial a} \odot \frac{\partial \sigma(z_i)}{\partial z}
+$$
+
+## da
+From $z = W a + b$, $a_i$는 $W$의 $W_{ji}$와 각각 곱해져서 $z_j$에 포함된다.. $J \leftarrow \text{ each } z_j \leftarrow a_i$.
+
+$$
+    \frac{\partial J}{\partial a_i} = \sum_j \frac{\partial J}{\partial z_j} \frac{z_j}{a_i}\\
+    = \sum_j \frac{\partial J}{\partial z_j} W_{ji}\\
+$$
+W에서 i번째 column 벡터와 내적.
+$$
+    = < \frac{\partial J}{\partial z}, W^T_i >\\
+$$
+
+원래 column 벡터인데... 앞 첨자로 표현하려면 row가 되어야 한다. 그래서 T 걸어줌. 내적 계산 자체는 $W^T_i \cdot \frac{\partial J}{\partial z}$이다. 이미 $W^T_i$가 row 라서 바로 내적. 
+
+벡터 a는 column vector이다.
+
+$$
+    \frac{\partial J}{\partial a} = \begin{bmatrix}
+        \vdots\\
+        \frac{\partial J}{\partial a_i}\\
+        \vdots\\
+    \end{bmatrix} = \begin{bmatrix}
+        \vdots\\
+        < \frac{\partial J}{\partial z}, W^T_i >\\
+        \vdots\\        
+    \end{bmatrix} = \begin{bmatrix}
+        \vdots\\
+        W^T_i \cdot \frac{\partial J}{\partial z}\\
+        \vdots\\
+    \end{bmatrix}
+$$
+
+$\frac{J}{z}$는 이미 벡터이다. 동일한 벡터를 다른 W_i벡터로 각각 내적하는 것은 matrix product 계산이다. 따라서
+
+$$
+    = W^T \cdot \frac{\partial J}{\partial  z}\\
+$$
+
+## Note
+$J = \frac{1}{m} \sum_i \mathcal{L}( \hat y_i, y_i)$이라서 $J \in R$이다. 그리고 $a$와 $z$들은 사실 각 example i마다 가지고 있다. 따라서 $\frac{J}{a}, \frac{J}{z}$는 ith example 마다 모두 가지고 있다. J에 모든 i에 대한 summation이 걸려있지만, 다른 j번째 a으로 미분하면 다른 example의 $\frac{ \partial L(y_{i})} {\partial a} = 0$이다(Back Propagation of m examples 참조). 따라서 $\frac{J}{a}$에서 summation의 의미는 하나의 matrix에 각 column 별로 $\frac{L^i}{a}$을 stack 하는 것에 지나지 않는다. 
+
+반면 W와 b는 모든 example들이 공유하고 있는 파라미터이다. 
+
+Coursera에서 이렇게 구현했음.1 / m을 W와 b에만 곱한다. 
+의문1: Z와 A는? => dZ와 dA는 J가 아니라 L을 미분한 상태.
+의문2: 1/m을 계속 곱하나? 누적해서? => dW와 dB는 dZ와 A만 사용한다. dZ에는 1/m이 없음. 각 layer 마다 1/m을 지속적으로 챙겨주는 것. 
+
+왜 이렇게 구현했을까? 그냥 J을 Z와 A에도 넣으면 안되었을까? 
+
+수학에서는 동일할 것 같다. 1/m sum_i L을 A으로 미분... 
+각 i th eg으로 미분한다음에 더하는 것과 더한 1개의 값에 미분하는 것이 같은 결과. 
+
+컴퓨터에서 미분하려면, 계산한 뒤에 대입해야 함. Z으로 Sum까지 하면 실수 되어서 미분계산 못함. L으로 벡터에서 미분하고, 나중에 더하는 것이 사실 필연적. 
+
+코드
+```
+init
+    dZ(L)
+    dW(L)
+    db(L)
+    dA(L)
+
+
+grad
+    dA(l) = W(l).T.dot.dZ(l+1)
+    dZ(l) = dA(l).mult.A(l)'(Z(l))
+    dW(l) = 1/m * dZ(l).dot.A(l-1).T
+    db(l) = 1/m * sum( dZ(l) )
+```
+
+
+# 모든 과정을 직접 나타내보기.
 
 호옥시 back propagation의 계산 과정이 진짜로 우리가 알고 있는 그대로 나오는지 궁금해서 한번 모든 과정을 나타내보았어요.
 
@@ -191,7 +329,12 @@ $$
             \delta^l_i \cdot (a^{[l-1]})^T\\
             |\\
         \end{bmatrix}\\
-        & = <\delta^l , (a^{[l-1]})^T> [\because \text{ $(a^{[l-1]})^T$ is a vector.}]\\
+        & = \begin{bmatrix}
+            |\\
+            \delta^l_i \\
+            |\\
+        \end{bmatrix}\cdot (a^{[l-1]})^T\\
+        & = <\delta^l , (a^{[l-1]})^T> [\because \text{ both $\delta^l$ and $(a^{[l-1]})^T$ is a vector.}]\\
         & = \delta^l \cdot (a^{[l-1]})^T\\
         & = \frac{\partial \mathcal{L}}{\partial z^{[l]}}  \cdot (a^{[l-1]})^T\\
     \end{aligned}\\
@@ -252,15 +395,15 @@ element으로 미분
 $$
         \begin{aligned}
 
-        \\
         \frac{\partial \mathcal{L}}{\partial a^{[l]}_i} & : (1 \times 1)\\
         \frac{\partial \mathcal{L}}{\partial a^{[l]}_i} & = \underbrace{\frac{\partial z^{[l+1]}}{\partial a^{[l]}_i}}_{1 \times m_{l+1}} \cdot  \underbrace{\frac{\partial \mathcal{L}}{\partial z^{[l+1]}}}_{m_{l+1} \times 1}\\
 
+        & = {W^{[l]}}^{T}_{i} \cdot \delta^{[l+1]}
 
         \end{aligned}\\
 $$
 
-denumerator formation이고 denumerator가 scalar이므로 shape 맞춰주기 위해 $z^{[l+1]}$을 transpose. ${W^{[l]}}^{T}_{i} \cdot \delta^{[l+1]}$에서 $a_i$가 각 unit에 $W$의 jth column과 내적
+기계적으로 생각하면, denumerator formation이고 denumerator가 scalar이므로 shape 맞춰주기 위해 $z^{[l+1]}$을 transpose. ${W^{[l]}}^{T}_{i} \cdot \delta^{[l+1]}$에서 $a_i$가 각 unit에 $W$의 jth column과 내적한다. 직관적으로 생각하면, 1개의 a는 여러개의 다음 노드 z에 연결된다. 따라서 전미분으로 생각해야 한다. 비용함수를 1개의 a으로 미분하면, a가 각 노드 z으로 연결되는 미분값과 각 노드 z에 대해 미분한 미분 값의 chain rule의 전미분 값으로의 합이다. 이 합이 내적으로 표현된다.
 
 벡터로 미분
 
@@ -268,7 +411,7 @@ $$
     \begin{aligned}
         \\
         \frac{\partial \mathcal{L}}{\partial a^{[l]}} & : (m_l \times 1)\\
-        \frac{\partial \mathcal{L}}{\partial a^{[l]}_i} & = \begin{bmatrix}
+        \frac{\partial \mathcal{L}}{\partial a^{[l]}} & = \begin{bmatrix}
             |\\
              \frac{\partial \mathcal{L}}{\partial a^{[l]}_i}\\
             |\\
@@ -387,6 +530,8 @@ $Z^{[l]} \in R^{m_l \times m}, A^{[l]} \in R^{m_l \times m},W^{[l]} \in R^{m_l \
 
 
 ## $\frac{\partial \mathcal{L}}{\partial Z^{[l]}} = \frac{\partial \mathcal{L}}{\partial A^{[l]}} *  A'^{[l]}(Z^{[l]})$
+
+a와 z는 eg 끼리 분리되어 있어서 각 eg끼리 미분하면 다른 eg에서는 0이 되어서 그냥 벡터화. W는 공유하기 때문에 내적이 발생. 1개의 $W_{ij}$으로 미분하면, m개의 eg에 대해 전미분해야 한다. 그  합이 내적에서 표현된다.
 
 $$
 
@@ -579,5 +724,5 @@ grad
     dA(l) = W(l).T.dot.dZ(l+1)
     dZ(l) = dA(l).mult.A(l)'(Z(l))
     dW(l) = 1/m * dZ(l).dot.A(l-1).T
-    db(l) = sum( dZ(l) )
+    db(l) = 1/m * sum( dZ(l) )
 ```

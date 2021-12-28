@@ -2,9 +2,13 @@
 title: "Trainer_API"
 last_modified_at: 2021-10-13T16:20:02-05:00
 categories:
-  - NLP
+  - nlp
+  - deep-learning
+tags:
   - Huggingface
   - Trainer
+  - issue
+  - project
 ---
 
 # 사전 지식: 

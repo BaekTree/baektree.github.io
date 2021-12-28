@@ -2,10 +2,13 @@
 title: "Trainer_API_QA_task_Log"
 last_modified_at: 2021-10-15T16:20:02-05:00
 categories:
-  - NLP
+  - nlp
+  - deep-learning
+tags:
   - Huggingface
   - Trainer
   - issue
+  - project
 ---
 ## 문제점
 huggingface에서 QA task example에서... 

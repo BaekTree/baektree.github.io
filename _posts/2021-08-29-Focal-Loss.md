@@ -7,6 +7,7 @@ categories:
   - loss function
 tags:
   - focal loss
+  - paper
 ---
 
 # focal loss
@@ -39,7 +40,7 @@ $$\operatorname{FL}\left(p_{\mathrm{t}}\right)=-\left(1-p_{\mathrm{t}}\right)^{\
 $$\mathrm{FL}\left(p_{\mathrm{t}}\right)=-\alpha_{\mathrm{t}}\left(1-p_{\mathrm{t}}\right)^{\gamma} \log \left(p_{\mathrm{t}}\right)$$
 
 그리고 여기에 sigmoid까지 넣어서 0과 1사이의 범위 안에 오도록 안정성까지 추가.
-
+  
 이후에는 Retina Net에 대한 설명과 구현까지 나오는데, 당장은 NLP 쪽에 더 큰 관심이 있어서 다음을 위해 미뤄둠.
 
 실제 저자들은 focal loss을 Retina Net에 적용해서 one stage decoder임에도 다른 two stage decode의 성능을 뛰어넘는다는 실험 결과를 보임. 

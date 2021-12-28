@@ -1,26 +1,22 @@
-**# Paper Review Attention is all you need**
-
-**# Iteration 1**
-
-**## title:**
+***# Paper Review Attention is all you need****
+***# Iteration 1****
+***## title:****
 
 Attention is all you need
 
-제목이 도발적임.
-
-**## figure1:**
+***## figure1:****
 
 architecture. encoder part and decoder part으로 구성 됨.
 
-**## fig2:**
+***## fig2:****
 
 attention의 두가지 종류: scaled dot product and multi head attention
 
-**## abstract:**
+***## abstract:****
 
 dominant seqence model: encoder + decoder with RNN and CNN with attention mechanism. Introducing Transformer, based only sorely on attention machanisms, despenses with RNN and CNN. Only use attentions. => make parallelizable, less time to train, achieves outperforming scores even including ensembles.
 
-**## conclusion:**
+***## conclusion:****
 
 Transformer replaces RNN and CNN in encoder-decoder architecture with attention with multi head self attention mechanism.
 
@@ -28,17 +24,16 @@ turned out transformer trains significantly faster than RNN or CNN. Also achieve
 
 plan to apply to other task. such as input and output modalities other then test and attention mechanisms. to handle audios and videos, images. Making generation less sequential.
 
-**# Iteration 2**
+***# Iteration 2****
+***## introduction****
 
-**## introduction**
+RNN, LSTM used as a state of art method for ssequence modelings and transduction problems(********language modelingLM****** and ********machine translationMT******) using encoder-decoder.
 
-RNN, LSTM used as a state of art method for ssequence modelings and transduction problems(****language modelingLM**** and ****machine translationMT****) using encoder-decoder.
-
-- RNN
+RNN
 
 This inherently sequential nature precludes parallelization within training examples, which becomes critical at longer sequence lengths, as memory constraints limit
 
-- Attention
+Attention
 
 Attention mechanisms have become an integral part
 
@@ -52,15 +47,15 @@ relying entirely on an attention mechanism to draw global dependencies between i
 
 The Transformer allows for significantly more parallelization and can reach a new state of the art
 
-**## figure**
+***## figure****
 
 fig1:
 
 fig2
 
-**# Iteration 3**
+***# Iteration 3****
 
-2. background
+1. background
 
 CNN으로 RNN의 seq을 줄이고 병렬적으로 계산하려는 시도. input and output position에 대한 시간 복잡도가 선형/log으로 줄임.
 
@@ -74,11 +69,11 @@ the cost of reduced effective resolution due to averaging attention-weighted pos
 
 동일 sequence의 다른 위치를 represent할 수 있는 self attention!
 
-Self-attention, sometimes called intra-attention is an attention mechanism ****relating different positions**** of ****a single sequence**** in order to compute a representation of the sequence
+Self-attention, sometimes called intra-attention is an attention mechanism ********relating different positions****** of ********a single sequence****** in order to compute a representation of the sequence
 
 간단한 task에서는 RNN이 성능이 여전히 더 좋다
 
-End-to-end memory networks are based on a recurrent attention mechanism instead of sequence- aligned recurrence and have been shown to perform well on simple-language question answering and language modeling tasks [34].
+End-to-end memory networks are based on a recurrent attention mechanism instead of sequencealigned recurrence and have been shown to perform well on simple-language question answering and language modeling tasks [34].
 
 3. architecture
 
@@ -160,7 +155,7 @@ softmax는 큰 값에 몰아준다. 그래서 scale이 커지면 큰 값만 1에
 
 scaled dot product에서√dk으로 나누는 이유에 대해 논문에서는 softmax에 들어가는 input 값이 너무 크면 gradient가 0에 가까운 값이 되어서 학습이 잘 되지 않는다고 표현되어 있는데요! 궁금해서 찾아본 내용 공유합니다!
 
-요약: softmax는 input의 scale을 반영하지 않아서, input 벡터 중에 큰 값이 포함되어 있으면 1에 가까운 값으로 몰빵을 준다. softmax의 gradient는 softmax 값을 ( s x (1 - s ) )와 같이) 사용하는데, 1에 가까운 값이 있으면 전체 gradient 값이 0이 되어버린다. 그래서 back propagation이 모두 0에 가깝게 되어 학습이 잘 되지 않음. softmax의 input 값을 어느 정도 작게 하기 위해서 vector dimension에 맞춰서 나눠서 값을 줄여준다!
+요약: softmax는 input의 scale을 반영하지 않아서, input 벡터 중에 큰 값이 포함되어 있으면 1에 가까운 값으로 몰빵을 준다. softmax의 gradient는 softmax 값을 ( s x (1 s ) )와 같이) 사용하는데, 1에 가까운 값이 있으면 전체 gradient 값이 0이 되어버린다. 그래서 back propagation이 모두 0에 가깝게 되어 학습이 잘 되지 않음. softmax의 input 값을 어느 정도 작게 하기 위해서 vector dimension에 맞춰서 나눠서 값을 줄여준다!
 
 "We suspect that for large values of dk, the dot products grow large in magnitude, pushing the softmax function into regions where it has extremely small gradients 4. To counteract this effect, we scale the dot products by 1 /√dk"
 
@@ -182,47 +177,77 @@ concat으로 각각의 representation을 모아서 linear layer에 통과시켜�
 
 인코더
 
-- 문장이 토큰으로 토크나이징된다.
-- 토큰들이 embedding 되어서 이제 1개의 토큰은 벡터이다.
-- sin, cosin 으로 정해진 positional embedding과 더해진다.
-- 토큰 sequence가 인코더에 들어간다.
-- 각 마다 3개의 독립적인 linear layer에 들어간다. 각각 key, query, value가 되어서 나온다.
-- qkv가 self attention block에 진입한다.
-- 각 q가 전체 다른 k에 대해서 scaled dot product 수행되고 softmax으로 유사도의 상대적인 정도가 확률화된다.
-- 확률=가중치에 대해 value으로 가중평균한다. 이것이 한 토큰의 query에 대한 가중 평균 value 값이다. 직관적으로 한 토큰과 유사한 단어들의 가중평균 정보를 가지고 있다.
-- 이 self attention block 8개가 동시에 병렬적으로 수행된다.
-- 각 토큰에 대한 유사도가 포함되어 있는 value 가중 평균 정보들이 concat 된다.
-- linear layer을 거치면서 정보가 종합적으로 합쳐지고 차원도 다시 원래 차원으로 복귀(d_model = 512).
-- 이 multihead attention 값이 다시 key, query, value가 되어서 다음 multi head attention block에 들어간다.
-- 들어가면서 각각 linear layer을 거쳐서 d_k, d_k, d_v 차원으로 변환.
-- 6번 반복한다.
-- 1개의 토큰에 대해서 512 차원의 벡터가 나온다.
-- 이게 max len 만큼 있는 것.
-- 그리고 배치 마다 있는 것.
-- 이제 디코더
-- 수행하려는 디코더 task에 따른 데이터가 준비되어야 한다.
-- 인코더와 마찬가지로 문장이 토큰으로 분리 된다.
-- 그리고 각 토큰 마다 벡터로 임베딩 된다.
-- 각 토큰은 인코더와 마찬가지로 3개의 독립적인 linear layer을 지나서 key, query, value가 된다.
-- 각각의 차원은 d_k, d_k, d_v가 된다.
-- qkv가 multi attention에 들어가고 인코더와 마찬가지로 self attention을 수행.
-- 그런데 이때... 디코더의 특성: 차례 차례 predict 한다. 따라서 실제 inference할 때와 학습할 때가 동일하게 해야 잘 학습. 그래서 self attention을 할때 masking을 넣어서 각 토큰이 들어갈 때 자기 오른쪽의 토큰들을 self attention을 하지 못하게 해야 한다.
+문장이 토큰으로 토크나이징된다.
+토큰들이 embedding 되어서 이제 1개의 토큰은 벡터이다.
+sin, cosin 으로 정해진 positional embedding과 더해진다.
+토큰 sequence가 인코더에 들어간다.
+각 마다 3개의 독립적인 linear layer에 들어간다. 각각 key, query, value가 되어서 나온다.
+qkv가 self attention block에 진입한다.
+각 q가 전체 다른 k에 대해서 scaled dot product 수행되고 softmax으로 유사도의 상대적인 정도가 확률화된다.
+확률=가중치에 대해 value으로 가중평균한다. 이것이 한 토큰의 query에 대한 가중 평균 value 값이다. 직관적으로 한 토큰과 유사한 단어들의 가중평균 정보를 가지고 있다.
+이 self attention block 8개가 동시에 병렬적으로 수행된다.
+각 토큰에 대한 유사도가 포함되어 있는 value 가중 평균 정보들이 concat 된다.
+linear layer을 거치면서 정보가 종합적으로 합쳐지고 차원도 다시 원래 차원으로 복귀(d_model = 512).
+이 multihead attention 값이 다시 key, query, value가 되어서 다음 multi head attention block에 들어간다.
+들어가면서 각각 linear layer을 거쳐서 d_k, d_k, d_v 차원으로 변환.
+6번 반복한다.
+1개의 토큰에 대해서 512 차원의 벡터가 나온다.
+이게 max len 만큼 있는 것.
+그리고 배치 마다 있는 것.
+이제 디코더
+수행하려는 디코더 task에 따른 데이터가 준비되어야 한다.
+인코더와 마찬가지로 문장이 토큰으로 분리 된다.
+그리고 각 토큰 마다 벡터로 임베딩 된다.
+각 토큰은 인코더와 마찬가지로 3개의 독립적인 linear layer을 지나서 key, query, value가 된다.
+각각의 차원은 d_k, d_k, d_v가 된다.
+qkv가 multi attention에 들어가고 인코더와 마찬가지로 self attention을 수행.
+그런데 이때... 디코더의 특성: 차례 차례 predict 한다. 따라서 실제 inference할 때와 학습할 때가 동일하게 해야 잘 학습. 그래서 self attention을 할때 masking을 넣어서 각 토큰이 들어갈 때 자기 오른쪽의 토큰들을 self attention을 하지 못하게 해야 한다.
 
 [http://nlp.seas.harvard.edu/2018/04/03/attention.html#encoder-and-decoder-stacks](http://nlp.seas.harvard.edu/2018/04/03/attention.html#encoder-and-decoder-stacks)
 
 ```python
+
 def attention(query, key, value, mask=None, dropout=None):
-    "Compute 'Scaled Dot Product Attention'"
-    d_k = query.size(-1)
-    scores = torch.matmul(query, key.transpose(-2, -1)) \
-             / math.sqrt(d_k)
-    if mask is not None:
-        scores = scores.masked_fill(mask == 0, -1e9)
-    p_attn = F.softmax(scores, dim = -1)
-    if dropout is not None:
-        p_attn = dropout(p_attn)
-    return torch.matmul(p_attn, value), p_attn
+
+# "Compute 'Scaled Dot Product Attention'"
+
+# query size (batch, num_head, max_len, d_k)
+
+# key size (batch, num_head, max_len, d_k)
+
+# value size (batch, num_head, max_len, d_k)
+
+d_k = query.size(-1)
+
+# key transpose size (batch, (batch, num_head, d_k, max_len)
+
+scores = torch.matmul(query, key.transpose(-2, -1)) \
+
+/ math.sqrt(d_k)
+
+# output size (batch, num_head, max_len, max_len)
+
+if mask is not None:
+
+scores = scores.masked_fill(mask == 0, -1e9)
+
+p_attn = F.softmax(scores, dim = -1)
+
+# p_attn size (batch, num_head, max_len, max_len)
+
+if dropout is not None:
+
+p_attn = dropout(p_attn)
+
+return torch.matmul(p_attn, value), p_attn
+
 ```
+
+토치의 matmul: 2차원 행렬 곱을 해준다. 만약에 2차원 이상의 텐서라면? 끝 2자리 행렬을 계산하고 나머지는 element wise 처리한다. 이 경우에 동일한 num_head에서 2차원 행렬을 곱한 결과가 나온다. max_len의 dimension의 원소 하나는 1개의 단어들에 대한 토큰 벡터이다. q의 단어 토큰 벡터와 k의 단어 토큰 벡터가 내적되는 것이다. 따라서 최종 `output size (batch, num_head, max_len, max_len)`의 의미는 ... 한 원소가 두 단어 벡터의 내적의 결과가 된다.
+
+여기에 mask을 적용될 때 traiangular mask을 적용한다. mask의 index가 0인 위치에$$ `-1e9`을 적용한다. softmax에 들어갔을 때 해당 index의 확률 값이 0으로 바뀐다. 이것은 디코더에서 현재 값의 다음 값을 알지 못하는 상태로 self attention을 수행하는 것과 같다. 어떻게? 각 row는 한 단어 토큰 벡터가 다른 토큰 벡터들이랑 내적해서 얻은 유사도 값이다. L개의 토큰이 L개의 토큰들과 서로 내적해서 얻은 L*L 행렬이 나온 것이다. mask는 자기 자신 이후의 단어들과의 내적을 무효화해야 한다. 따라서 대각선을 중심으로 오른쪽을 모두 -infin으로 만든다. 이 행렬을 softmax에 집어넣고, row을 기준으로 softmax 연산을 수행하면, 대각선 오른쪽의 값들은 0이 되고 대각선 왼쪽으로 확률이 흩어진다.
+
+그리고 나온 결과 attention L, L 행렬은... layer norm 하고 linear을 거쳐야 한다.
 
 인코더에서 학습이 끝나면 각 토큰에 대해 attention vector가 나온다. 이걸 key와 value으로 생각해서 디코더에게 전달.
 
@@ -234,18 +259,16 @@ def attention(query, key, value, mask=None, dropout=None):
 
 # transformer
 
-- 인코더 디코더 모델에서 시작!
-- no more sequential! parellel!!!
-- attention + cnn
-- parellel with cnn style
+인코더 디코더 모델에서 시작!
+no more sequential! parellel!!!
+attention + cnn
+parellel with cnn style
 
 ## key ideas:
 
-- self attention.
-
-* e.g. 5 words. attention in parellel.
-
-- multiple version
+self attention.
+e.g. 5 words. attention in parellel.
+multiple version
 
 # self attention
 
@@ -259,7 +282,7 @@ $$
 
 https://nlpinkorean.github.io/illustrated-transformer/
 
-- 번역 문제에 적용
+번역 문제에 적용
 
 1. 문장을 한꺼번에 다 집어넣는다. 병렬적으로.
 
@@ -269,7 +292,7 @@ https://nlpinkorean.github.io/illustrated-transformer/
 
 https://nlpinkorean.github.io/illustrated-transformer/
 
-- 번역 문제에 적용
+번역 문제에 적용
 
 1. 문장을 한꺼번에 다 집어넣는다. 병렬적으로.
 
@@ -287,16 +310,240 @@ https://nlpinkorean.github.io/illustrated-transformer/
 
 8. 이 과정을 병렬적으로 하기 위해서 행렬로 만든다. vectorization!
 
-- 이러면 self attention이 끝. 이게 1개의 head이다.
-- 이것을 서로 다른 8개를 실행 = multihead.
-- featuremap과 유사?
-- 서로 다른 hidden representation을 만드는 것.
-- 각 head는 각 단어와의 유사성을 다르게 찾는다.
-- 생각해볼 질문: q,k,v을 왜? 어떻게 생각하게 되었을까? 디비와의 연관성은?
-- decoder에 넣는다.
-- mask 사용ㅎ서 미래 쿼리 막는다
-- 맨 처음 학습에 의한 기본 출력? startToken이 입력으로 들어온다.
-- 그 출력이 입력 쿼리로 온다.
-- 인코더에서 받은 k,v 매트릭스와 multihead와 내적 weighted sum.
-- 합쳐서 벡터 출력.
-- normalize 하고 ff 거쳐서 softmax으로 단어 예측 하고 argmax으로 가장 큰 단어 vocab에서 추출.
+이러면 self attention이 끝. 이게 1개의 head이다.
+이것을 서로 다른 8개를 실행 = multihead.
+featuremap과 유사?
+서로 다른 hidden representation을 만드는 것.
+각 head는 각 단어와의 유사성을 다르게 찾는다.
+생각해볼 질문: q,k,v을 왜? 어떻게 생각하게 되었을까? 디비와의 연관성은?
+decoder에 넣는다.
+mask 사용ㅎ서 미래 쿼리 막는다
+맨 처음 학습에 의한 기본 출력? startToken이 입력으로 들어온다.
+그 출력이 입력 쿼리로 온다.
+인코더에서 받은 k,v 매트릭스와 multihead와 내적 weighted sum.
+합쳐서 벡터 출력.
+normalize 하고 ff 거쳐서 softmax으로 단어 예측 하고 argmax으로 가장 큰 단어 vocab에서 추출.
+qkv가 self attention block에 진입한다.
+각 q가 전체 다른 k에 대해서 scaled dot product 수행되고 softmax으로 유사도의 상대적인 정도가 확률화된다.
+확률=가중치에 대해 value으로 가중평균한다. 이것이 한 토큰의 query에 대한 가중 평균 value 값이다. 직관적으로 한 토큰과 유사한 단어들의 가중평균 정보를 가지고 있다.
+이 self attention block 8개가 동시에 병렬적으로 수행된다.
+각 토큰에 대한 유사도가 포함되어 있는 value 가중 평균 정보들이 concat 된다.
+linear layer을 거치면서 정보가 종합적으로 합쳐지고 차원도 다시 원래 차원으로 복귀(d_model = 512).
+이 multihead attention 값이 다시 key, query, value가 되어서 다음 multi head attention block에 들어간다.
+들어가면서 각각 linear layer을 거쳐서 d_k, d_k, d_v 차원으로 변환.
+6번 반복한다.
+1개의 토큰에 대해서 512 차원의 벡터가 나온다.
+이게 max len 만큼 있는 것.
+그리고 배치 마다 있는 것.
+이제 디코더
+수행하려는 디코더 task에 따른 데이터가 준비되어야 한다.
+인코더와 마찬가지로 문장이 토큰으로 분리 된다.
+그리고 각 토큰 마다 벡터로 임베딩 된다.
+각 토큰은 인코더와 마찬가지로 3개의 독립적인 linear layer을 지나서 key, query, value가 된다.
+각각의 차원은 d_k, d_k, d_v가 된다.
+qkv가 multi attention에 들어가고 인코더와 마찬가지로 self attention을 수행.
+그런데 이때... 디코더의 특성: 차례 차례 predict 한다. 따라서 실제 inference할 때와 학습할 때가 동일하게 해야 잘 학습. 그래서 self attention을 할때 masking을 넣어서 각 토큰이 들어갈 때 자기 오른쪽의 토큰들을 self attention을 하지 못하게 해야 한다.
+
+[http://nlp.seas.harvard.edu/2018/04/03/attention.html#encoder-and-decoder-stacks](http://nlp.seas.harvard.edu/2018/04/03/attention.html#encoder-and-decoder-stacks)
+
+```python
+def attention(query, key, value, mask=None, dropout=None):
+
+	# "Compute 'Scaled Dot Product Attention'"
+	
+	# query size (batch, num_head, max_len, d_k)
+	# key size (batch, num_head, max_len, d_k)
+	# value size (batch, num_head, max_len, d_k)
+	d_k = query.size(-1)
+	# key transpose size (batch, (batch, num_head, d_k, max_len)
+	scores = torch.matmul(query, key.transpose(-2, -1)) \
+						/ math.sqrt(d_k)
+	# output size (batch, num_head, max_len, max_len)
+	if mask is not None:	
+		scores = scores.masked_fill(mask == 0, -1e9)	
+	p_attn = F.softmax(scores, dim = -1)
+	# p_attn size (batch, num_head, max_len, max_len)
+	
+	if dropout is not None:
+		p_attn = dropout(p_attn)
+	return torch.matmul(p_attn, value), p_attn
+	# return size(batch, num_head, max_len, d_k)
+```
+
+![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/f0b505a0-1d04-4c08-a3a0-cf60c85f0d14/Untitled.png)
+
+토치의 matmul: 2차원 행렬 곱을 해준다. 만약에 2차원 이상의 텐서라면? 끝 2자리 행렬을 계산하고 나머지는 element wise 처리한다. 이 경우에 동일한 num_head에서 2차원 행렬을 곱한 결과가 나온다. max_len의 dimension의 원소 하나는 1개의 단어들에 대한 토큰 벡터이다. q의 단어 토큰 벡터와 k의 단어 토큰 벡터가 내적되는 것이다. 따라서 최종 `output size (batch, num_head, max_len, max_len)`의 의미는 ... 한 원소가 두 단어 벡터의 내적의 결과가 된다.
+
+여기에 mask을 적용될 때 traiangular mask을 적용한다. mask의 index가 0인 위치에$$ `-1e9`을 적용한다. softmax에 들어갔을 때 해당 index의 확률 값이 0으로 바뀐다. 이것은 디코더에서 현재 값의 다음 값을 알지 못하는 상태로 self attention을 수행하는 것과 같다. 어떻게? 각 row는 한 단어 토큰 벡터가 다른 토큰 벡터들이랑 내적해서 얻은 유사도 값이다. L개의 토큰이 L개의 토큰들과 서로 내적해서 얻은 L*L 행렬이 나온 것이다. mask는 자기 자신 이후의 단어들과의 내적을 무효화해야 한다. 따라서 대각선을 중심으로 오른쪽을 모두 -infin으로 만든다. 이 행렬을 softmax에 집어넣고, row을 기준으로 softmax 연산을 수행하면, 대각선 오른쪽의 값들은 0이 되고 대각선 왼쪽으로 확률이 흩어진다.
+
+그리고 나온 결과 attention L, d_k 행렬은... concat되어서 multi head을 통합해야 한다. 
+
+```python
+# deep copy given module N times and return the list of the module.
+def clones(module, N):
+    "Produce N identical layers."
+    return nn.ModuleList([copy.deepcopy(module) for _ in range(N)])
+```
+
+```python
+class MultiHeadedAttention(nn.Module):
+    def __init__(self, h, d_model, dropout=0.1):
+        "Take in model size and number of heads."
+        super(MultiHeadedAttention, self).__init__()
+        assert d_model % h == 0
+        # We assume d_v always equals d_k
+        self.d_k = d_model // h
+        self.h = h
+				# linear layer to create query, key, value vector.
+				# and lastly the final FC layer after the multihead attention.
+        self.linears = clones(nn.Linear(d_model, d_model), 4)
+        self.attn = None
+        self.dropout = nn.Dropout(p=dropout)
+        
+    def forward(self, query, key, value, mask=None):
+        "Implements Figure 2"
+        if mask is not None:
+            # Same mask applied to all h heads.
+            mask = mask.unsqueeze(1)
+        nbatches = query.size(0)
+        
+        # 1) Do all the linear projections in batch from d_model => h x d_k 
+        query, key, value = \
+            [l(x).view(nbatches, -1, self.h, self.d_k).transpose(1, 2)
+             for l, x in zip(self.linears, (query, key, value))]
+							# python zip: input iterables and make a tuple for each index.
+							# ultil the minimul length of the iterable.
+							# in this case, (linear, query), (linear, key), (linar, value).
+							# 3 times only. Because the final layer is for the FC layer.
+							# q = linear(query), ...
+						
+        
+        # 2) Apply attention on all the projected vectors in batch. 
+        x, self.attn = attention(query, key, value, mask=mask, 
+                                 dropout=self.dropout)
+        # x size(batch, num_head, max_len, d_k)
+
+        # 3) "Concat" using a view and apply a final linear. 
+        x = x.transpose(1, 2).contiguous() \
+             .view(nbatches, -1, self.h * self.d_k)
+						# final dimention of x : (batch, max_len, d_model
+        return self.linears[-1](x) # final layer is for FC layer.
+				# return size (batch, max_len, d_model, d_model)
+
+```
+
+concat 해서 마지막 fc layer에 넣어서 반환. 반환하는 차원은... 모델 전체를 관통하는 d_model = 512. 
+
+들어가기 전에 (batch, max_len, d_model)이고 나와서도 동일하다. attention vector가 처음 input의 각 토큰 마다 1개씩 있는 것. 유사도를 고려한 가중 평균 value vector들이다. 
+
+의문점: multihead가 concat되면 (batch, max_len, d_model)이 다시 된다.
+
+여기에 W을 다시 곱해주는데, W의 차원은 (d_model, d_k)이다. 왜 다시 d_k으로 만들지? 내가 잘못 봄. W_o을 곱한다. W_o는 d_mdeol, d_model이 맞다. 
+
+디코더
+
+디코더에 N개의 레이어가 있다.
+
+1개의 레이어의 구성
+
+```python
+x(batch, max_len, h)
+input x
+q,k,v = x
+attn = multihead_attention(q,k,v, mask)
+	class multihead_attention
+		d_k = d_model / num_head
+		linear(d_model, d_model)
+		# in paper, linear(d_model, d_k). linear(q,k,v) for each head seperately.
+		# but here, linear(d_model, d_model) then use view to seperate to each head.
+
+		def forward
+			q,k,v = linear(q,k,v).view(batch, num_head, max_len, d_k) # for each
+			attn_val = attention(q,k,v) # for each head
+				class attention
+					def forward
+						attn_val = softmax( ( q dot k.T ) / sqrt(d_k), dim = row ) * v
+						return attn_val # size(batch, num_head, max_len, d_k)
+			return linear(attn_val.view(batch, num_head, d_model))
+x = layer_norm(attn + x)
+x = layer_norm(x + fc(x))
+```
+
+이걸 6번 반복해서 encoder의 결과를 반환.
+
+매 block마다 attention 하고 fc을 한다. 마지막 generator은 d_model을 classification 크기에 맞게 linear으로 차원 변환하는 것. 최종 결과: (batch, max_len, d_model). 각 토큰 마다 1개의 attention 벡터가 있음.
+
+인코더에서 학습이 끝나면 각 토큰에 대해 attention vector가 나온다. 이걸 key와 value으로 생각해서 디코더에게 전달.
+
+디코더에서 self attention을 한 결과 attention vector가 query가 된다. encoder에서 나온 값들과 함께 attention
+
+1. why self attention
+
+2. variants
+
+# transformer
+
+인코더 디코더 모델에서 시작!
+no more sequential! parellel!!!
+attention + cnn
+parellel with cnn style
+
+## key ideas:
+
+self attention.
+e.g. 5 words. attention in parellel.
+multiple version
+
+# self attention
+
+$$
+
+A(q, K, V)=\sum_{i} \underbrace{\frac{\exp \left(q \cdot k^{<i}\right)}{\sum_{j} \exp \left(q \cdot k^{<j>}\right)}} v^{<i>}
+
+$$
+
+## 트랜스포머 설명 바이 설명 transformer
+
+https://nlpinkorean.github.io/illustrated-transformer/
+
+번역 문제에 적용
+
+1. 문장을 한꺼번에 다 집어넣는다. 병렬적으로.
+
+2. 각 단어 마다 미리 설정해둔(pretrain이든 뭐든) 임베딩을 사용해서 dense word embeding 벡터들로 만든다.
+
+## 트랜스포머 설명 바이 설명 transformer
+
+https://nlpinkorean.github.io/illustrated-transformer/
+
+번역 문제에 적용
+
+1. 문장을 한꺼번에 다 집어넣는다. 병렬적으로.
+
+2. 각 단어 마다 미리 설정해둔(pretrain이든 뭐든) 임베딩을 사용해서 dense word embeding 벡터들로 만든다.
+
+3. 각 단어들 마다 파라미터 벡터 $W^q. W^k, W^v$을 내적시켜서 $q,k,v$ 벡터를 만든다.
+
+4. 각 단어의 q와 다른 모든 단어들의 k을 내적사켜서 단어들 사이에 의미의 유사도를 찾는다. (코사인 유사도?).
+
+5. 상수로 나눠서 값을 줄인다.
+
+6. 그리고 소프트맥스를 해서 유사도에 대한 가중치를 만든다.
+
+7. 그리고 각 단어의 가중치와 v을 곱해서 모두 더하면... 각 단어의 q와 유사한 단어들과의 value 가중 평균 값을 얻는다!
+
+8. 이 과정을 병렬적으로 하기 위해서 행렬로 만든다. vectorization!
+
+이러면 self attention이 끝. 이게 1개의 head이다.
+이것을 서로 다른 8개를 실행 = multihead.
+featuremap과 유사?
+서로 다른 hidden representation을 만드는 것.
+각 head는 각 단어와의 유사성을 다르게 찾는다.
+생각해볼 질문: q,k,v을 왜? 어떻게 생각하게 되었을까? 디비와의 연관성은?
+decoder에 넣는다.
+mask 사용ㅎ서 미래 쿼리 막는다
+맨 처음 학습에 의한 기본 출력? startToken이 입력으로 들어온다.
+그 출력이 입력 쿼리로 온다.
+인코더에서 받은 k,v 매트릭스와 multihead와 내적 weighted sum.
+합쳐서 벡터 출력.
+normalize 하고 ff 거쳐서 softmax으로 단어 예측 하고 argmax으로 가장 큰 단어 vocab에서 추출.

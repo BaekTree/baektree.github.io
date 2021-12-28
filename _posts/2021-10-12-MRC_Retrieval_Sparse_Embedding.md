@@ -2,8 +2,9 @@
 title: "MRC_Retrieval_Sparse_Embedding"
 last_modified_at: 2021-10-12T16:20:02-05:00
 categories:
-  - NLP
-  - camp
+  - nlp
+  - boostcamp
+tags:
   - MRC
   - Retrieval
   - blog
@@ -25,7 +26,7 @@ Sparse Embedding
 n-gram: n개를 2개의 단어로 보고 vocab을 구성. 그래서... 만약 bi-gram이라고 했을 때, 단어의 수가 10개 이면 bigram voacb의 크기는 10^2이 된다... n gram이면 10^n이 됨. 단어의 수가 10만개면 bigram만 되어도 10만^2이 됨... 그래서 bigram 까지만 쓴다. 근데 왜 쓰나? vocab의 수가 어엄청 나게 커지는데... Bag of n-grams can be more informative than bag of words because they capture more context around each word (i.e. “love this dress” is more informative than just “dress”). 
 http://uc-r.github.io/creating-text-features#ngrams
 
-2. 빈도수 기반
+1. 빈도수 기반
 TF-IDF 같은 것
 
 Sparse 특징

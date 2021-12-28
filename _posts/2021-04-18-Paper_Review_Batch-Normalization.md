@@ -2,7 +2,8 @@
 title: "Paper_Review_Batch-Normalization"
 date: 2021-04-18T15:34:30-04:00
 categories:
-  - DeepLearning
+  - deep-learning
+  - paper-review
 tags:
   - DeepLearning
   - BatchNormalization

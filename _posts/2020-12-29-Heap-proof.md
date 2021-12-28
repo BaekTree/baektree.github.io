@@ -2,10 +2,10 @@
 title: "Heap-Proof"
 date: 2020-12-29T15:34:30-04:00
 categories:
-  - DataStructure
+  - data-structure
 tags:
-  - DataStructure
-  - Heap
+  - data-structure
+  - heap
 ---
 
 * 복잡도가 $O(n)$이라는데 궁금했음...
@@ -120,8 +120,8 @@ $$
 
 $$
     \frac{|L|}{n} = \frac{2^{h+1}-1 }{3 \cdot 2^{h} -1}\\
-    \text{as } n \to \inf, h \to \inf.\\
-    \lim_{n\to\inf} \frac{|L|}{n}  = \lim_{h\to\inf} \frac{2^{h+1}-1 }{3 \cdot 2^{h} -1}\\
+    \text{as } n \to \infty, h \to \infty.\\
+    \lim_{n\to\infty} \frac{|L|}{n}  = \lim_{h\to\infty} \frac{2^{h+1}-1 }{3 \cdot 2^{h} -1}\\
     = \frac 2 3\\
 $$
 
@@ -259,10 +259,10 @@ $$
      = O(n\sum_{h=0}^{\lfloor \lg n \rfloor}  \frac{h}{2^h} )\\
 $$
 
-* T(n)은 upper bound $n\sum_{h=0}^{\lfloor \lg n \rfloor}  \frac{h}{2^h}$이므로, $h\to \inf$일때
+* T(n)은 upper bound $n\sum_{h=0}^{\lfloor \lg n \rfloor}  \frac{h}{2^h}$이므로, $h\to \infty$일때
 
 $$
-    \sum_{h=0}^{\inf}  \frac{h}{2^h} = 2.\\
+    \sum_{h=0}^{\infty}  \frac{h}{2^h} = 2.\\
     \therefore T(n) = O(n 2)\\
     = O(n)\\
 
