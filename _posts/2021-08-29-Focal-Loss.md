@@ -1,6 +1,6 @@
 ---
 title: "paper-review-Focal-Loss"
-last_modified_at: 2021-08-06T16:20:02-05:00
+last_modified_at: 2021-08-29T16:20:02-05:00
 categories:
   - deep-learning
   - paper-review

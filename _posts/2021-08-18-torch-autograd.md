@@ -1,8 +1,8 @@
 ---
 title: "0818_autograd"
-last_modified_at: 2021-08-06T16:20:02-05:00
+last_modified_at: 2021-08-18T16:20:02-05:00
 categories:
-  - boostcamp
+  - project
 tags:
   - camp
   - autograd

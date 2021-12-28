@@ -274,7 +274,7 @@ $$
  GAN의 경우가 아니라 어떤 일반화된 경우를 고민해보고, 거기에 GAN을 적용해보자. 
 
 
-$f(x,\alpha)$ 모든 $\alpha$에서 x에 대해 convex일 때, pointwise supremum을 만족하는 $\alpha$들이 각 x마다 있게 만든다. 이 함수를 $f(x)$라고 하자. $f(x) = \sup_{\alpha} f(x, \alpha)$ pairwise supremum에서 적었던 대로 x에 대해서 convex 하면 pairwise supremum 함수 역시 x에 대해서 convex 한다. 따라서 f(x) 역시 x에 대해서 convex 하다. (일단 x에서 미분해서 gradient descent을 수행하면 적어도 f(x) 값이 내려갈 가능성은 생겼다)
+$f(x,\alpha)$ 모든 $\alpha$에서 x에 대해 convex일 때, pointwise supremum을 만족하는 $\alpha$들이 각 x마다 있게 만든다. 이 함수를 $f(x)$라고 하자. $f(x) = \sup_{\alpha} f(x, \alpha)$ pairwise supremum에서 적었던 대로 x에 대해서 convex 하면 pairwise supremum 함수 역시 x에 대해`서 convex 한다. 따라서 f(x) 역시 x에 대해서 convex 하다. (일단 x에서 미분해서 gradient descent을 수행하면 적어도 f(x) 값이 내려갈 가능성은 생겼다)
 
 $f(x)$ 중 하나의 $(x,\alpha)$ pair에서 하나의 점 $x_0$에서의 $\alpha$를 $\beta$라고 하고 이 $\beta$와 전체 domain x로 구성된 함수를 $f_\beta$라고 하자. 그리고 이때 $x_0$에서 $f_\beta$의 subgradient 중 하나를 g라고 하자.
 

@@ -1,6 +1,6 @@
 ---
 title: "1005-Implementing-NLP-tokenizer"
-last_modified_at: 2021-08-18T16:20:02-05:00
+last_modified_at: 2021-10-05T16:20:02-05:00
 categories:
   - nlp
   - deep-learning
