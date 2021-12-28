@@ -314,9 +314,9 @@ $$
 V(G, D^*) = \int_{\boldsymbol{x}} p_{g}(\boldsymbol{x}) \log (1-D^*(\boldsymbol{x})) d x
 $$
 
-$p_g$는 G의 파라미터 $\theta_g$로 표현되는 네트워크 함수이고 가짜 샘플 x을 생성한다. $\theta_g$을 미분으로 최적화하는 단계이기 때문에 $p_g$로부터 만들어진 $\bold x$와 $D^*(\bold x)$는 여기에서 상수이다. 따라서 $\log (1-D^*(\boldsymbol{x}))$ 항은 상수이므로 convex이다. 즉 V는 $p_g$에 대해서 convex 하다. 
+$p_g$는 G의 파라미터 $\theta_g$로 표현되는 네트워크 함수이고 가짜 샘플 x을 생성한다. $\theta_g$을 미분으로 최적화하는 단계이기 때문에 $p_g$로부터 만들어진 $\boldsymbol {x}$와 $$D^{*}(\boldsymbol {x})$$는 여기에서 상수이다. 따라서 $\log (1-D^*(\boldsymbol{x}))$ 항은 상수이므로 convex이다. 즉 V는 $p_g$에 대해서 convex 하다. 
 
-$V(G, D^*)$은 $D^*$으로 인해서 최대화된다. 이 부분이 위의 일반화한 경우의 $\sup_{\alpha} f(x)$이다. pairwise sup convex 함수의 한 위치에서 구한 subgradient는 전체 pairwise sup convex 함수에서 동일하게 최적화하는데 적용될 수 있다. 따라서 현재 주어진 G에서 최적화된 D을 극대화한 지점에서 subgradient을 사용해서 $p_g$을 최적화하면, 현재 $p_g$에서 뿐만 아니라 다른 $p_g$의 경우에 나올 수 있는 $D^*$에서의 최적화를 포함한다. iteration을 돌면서 $p_g$가 업데이트 되고 변할 것이다. 그리고 거기에 따라서 최적 D도 변화한다. 하지면 매 상황에서 D가 supremum의 하나이므로, $p_g$는 계속해서 점진적으로 global optimum을 향해서 수렴해갈 수 있담.
+그리고 $$V(G, D^{*})$$은 $$D^{*}$$으로 D에서 최대화된 값이다. 이 부분이 위의 일반화한 경우의 $\sup_{\alpha} f(x)$이다. pairwise sup convex 함수의 한 위치에서 구한 subgradient는 전체 pairwise sup convex 함수에서 동일하게 최적화하는데 적용될 수 있다. 따라서 현재 주어진 G에서 최적화된 D을 극대화한 지점에서 subgradient을 사용해서 $p_g$을 최적화하면, 현재 $p_g$에서 뿐만 아니라 다른 $p_g$의 경우에 나올 수 있는 $D^*$에서의 최적화를 포함한다. iteration을 돌면서 $p_g$가 업데이트 되고 변할 것이다. 그리고 거기에 따라서 최적 D도 변화한다. 하지면 매 상황에서 D가 supremum의 하나이므로, $p_g$는 계속해서 점진적으로 global optimum을 향해서 수렴해갈 수 있담.
 
 refer
 * https://math.stackexchange.com/questions/2226794/convergence-of-gans

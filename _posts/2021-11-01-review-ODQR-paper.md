@@ -85,7 +85,7 @@ question을 버트에 넣는다. CLS 만 뽑는다.
 
 passage을 버트에 넣는다. CLS만 뽑는다.
 
-![Untitled](/assets/src/ODQR%20paper%206e813abfa38a4b00996e53b4861c6b82/Untitled.png)
+![Untitled](/assets/src/ODQR/Untitled.png)
 
 question과 passage을 내적해서 유사도를 구함. passage는 모든 passge을 넣어서 각각의 hidden representation을 구한다. passage에 대해서는 미리 인코딩을 해놓는다. 그래서 fine tuning 할때에는? inference 할때에는? hidden representation들과 question의 인코딩 벡터들만 내적을 구함. 가장 큰 top k을 뽑는다. W는 128 차원이다.
 
@@ -99,7 +99,7 @@ question과 passage을 내적해서 유사도를 구함. passage는 모든 passg
 end에 해당하는
 hidden representation
 
-![Untitled](/assets/src/ODQR%20paper%206e813abfa38a4b00996e53b4861c6b82/Untitled%201.png)
+![Untitled]("/assets/src/ODQR/Untitled 1.png")
 
 두 hiden representation을 concat 해서
 MLP에 넣는다.
@@ -113,43 +113,43 @@ label 으로 주어지는 것을 바로 넣는다는
 코드를
 보자. reader 학습.
 
-![Untitled](/assets/src/ODQR%20paper%206e813abfa38a4b00996e53b4861c6b82/Untitled%202.png)
+![Untitled]("/assets/src/ODQR/Untitled 2.png")
 
-![Untitled](/assets/src/ODQR%20paper%206e813abfa38a4b00996e53b4861c6b82/Untitled%203.png)
+![Untitled]("/assets/src/ODQR/Untitled 3.png")
 
-![Untitled](/assets/src/ODQR%20paper%206e813abfa38a4b00996e53b4861c6b82/Untitled%204.png)
+![Untitled]("/assets/src/ODQR/Untitled 4.png")
 
 전자가 맞음. 일단 max_span_len을 정해놓고 모든 경우의 수를 만든다. 그리고 그 중에서 가장 
 
-![Untitled](/assets/src/ODQR%20paper%206e813abfa38a4b00996e53b4861c6b82/Untitled%205.png)
+![Untitled]("/assets/src/ODQR/Untitled 5.png")
 
 span_candidates으로 모든 span 경우의 수를 받아온다.
 
 output은 버트의 output이다. 각 토큰 마다 hidden token들이 존재한다. 버트의 QA을 따라서 전체 토큰을 S와 E 벡터에 넣고(사실상 단일 NLP: linear 한 다음에 relu 까-아지) softmax 해서 가장 큰 값의 토큰을 선택. 
 
-![Untitled](/assets/src/ODQR%20paper%206e813abfa38a4b00996e53b4861c6b82/Untitled%206.png)
+![Untitled]("/assets/src/ODQR/Untitled 6.png")
 
 S에 하나 E에 하나 해서 2개. 어차피 1개짜리 레이어는 긴거 하나 해서 반으로 뚝 잘라도 동일하다. 두 start_pos와 end_pos의 동일한 index가 각 span을 이룬다. 
 
 S와 E에 대해서 lin 한 결과에서 candidate 토큰을 뽑아냄.   QA에서 최종 score은 S와 E의 합이다.
 
-![Untitled](/assets/src/ODQR%20paper%206e813abfa38a4b00996e53b4861c6b82/Untitled%207.png)
+![Untitled]("/assets/src/ODQR/Untitled 7.png")
 
 각 span 결과에 대해서 relu로 activate 한다. 그리고 이 중에서 가장 큰 값을 뽑을 거임. 
 
-![Untitled](/assets/src/ODQR%20paper%206e813abfa38a4b00996e53b4861c6b82/Untitled%208.png)
+![Untitled]("/assets/src/ODQR/Untitled 8.png")
 
 요것은 BERT의 QA task fine tuning task prediction 방법이다.ㅇ
 
-![Untitled](/assets/src/ODQR%20paper%206e813abfa38a4b00996e53b4861c6b82/Untitled%209.png)
+![Untitled]("/assets/src/ODQR/Untitled 9.png")
 
 relu는 elementwise operation이다. 그래서 각 노드 1개가 1개의 output이 됨. 그래서?  차원은 여전히 num_candidates, span_hidden_size임. 
 
 span_hidden_size을 1개로 실수화. 각 candidate 마다 실수 값 1개만 가지게 되었다! 진짜 스코어가 됨!
 
-![Untitled](/assets/src/ODQR%20paper%206e813abfa38a4b00996e53b4861c6b82/Untitled%2010.png)
+![Untitled]("/assets/src/ODQR/Untitled 10.png")
 
-![Untitled](/assets/src/ODQR%20paper%206e813abfa38a4b00996e53b4861c6b82/Untitled%2011.png)
+![Untitled]("/assets/src/ODQR/Untitled 11.png")
 
 squeeze으로 1 차원을 없앤다. 그래서 이제 각 query에서(아마 주어진 query에서 각 top k의 reader_beam_size개의 문서 마다 num_candidate 마다 1개의 실수 스코어를 가진다. 
 
@@ -173,17 +173,17 @@ ICT을 끝내고 나서 버트를 통해서 passage들을 encoding 시켜 놓는
 
 구현에서의 특이점: prediction 자체에서는 softmax을 안넣고 그냥 ㄱ장 큰 span과 리트리버 값을 선택한다. 어차피 softmax을 하면 가장 큰게 크게 되고 거기서 argmax을 하니까 연산을 아끼려고 한 것 같다.
 
-![Untitled](/assets/src/ODQR%20paper%206e813abfa38a4b00996e53b4861c6b82/Untitled%2012.png)
+![Untitled]("/assets/src/ODQR/Untitled 12.png")
 
 loss을 구할때는 softmax을 함.
 
-![Untitled](/assets/src/ODQR%20paper%206e813abfa38a4b00996e53b4861c6b82/Untitled%2013.png)
+![Untitled]("/assets/src/ODQR/Untitled 13.png")
 
-![Untitled](/assets/src/ODQR%20paper%206e813abfa38a4b00996e53b4861c6b82/Untitled%2014.png)
+![Untitled]("/assets/src/ODQR/Untitled 14.png")
 
-![Untitled](/assets/src/ODQR%20paper%206e813abfa38a4b00996e53b4861c6b82/Untitled%2015.png)
+![Untitled]("/assets/src/ODQR/Untitled 15.png")
 
-![Untitled](/assets/src/ODQR%20paper%206e813abfa38a4b00996e53b4861c6b82/Untitled%2016.png)
+![Untitled]("/assets/src/ODQR/Untitled 16.png")
 
 Loss는 query에 대해 ground truth에 해당하는 passage b와 span s에 대한 확률의 negative marginal log liklihood가 됨. 
 
@@ -191,15 +191,15 @@ BM25를 능가했다.
 
 아래는 model 코드. 개괄을 알 수 있따.
 
-![Untitled](/assets/src/ODQR%20paper%206e813abfa38a4b00996e53b4861c6b82/Untitled%2017.png)
+![Untitled]("/assets/src/ODQR/Untitled 17.png")
 
 prediction을 따로 구하고.
 
-![Untitled](/assets/src/ODQR%20paper%206e813abfa38a4b00996e53b4861c6b82/Untitled%2018.png)
+![Untitled]("/assets/src/ODQR/Untitled 18.png")
 
 loss 구할 때는 reader correct을 구해서 reader ouptut을 넣는다. 
 
-![Untitled](/assets/src/ODQR%20paper%206e813abfa38a4b00996e53b4861c6b82/Untitled%2019.png)
+![Untitled]("/assets/src/ODQR/Untitled 19.png")
 
 모델 output에서 loss을 반환한다.
 
