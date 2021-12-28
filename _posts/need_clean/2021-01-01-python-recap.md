@@ -1,8 +1,8 @@
 ---
-title: "2021-01-01-python-recap"
+title: "python-recap"
 date: 2021-10-11T15:34:30-04:00
 categories:
-  - python
+  - recap
 tags:
   - python
   - recap

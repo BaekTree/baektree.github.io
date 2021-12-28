@@ -59,7 +59,7 @@ plugins:
 
 author:
   name   : "BaekTree"
-  avatar : "/assets/images/bio-photo-me.jpg"
+  avatar : "/assets/images/bio-photo-me.jpeg"
   bio    : "Go Grow, Serve the others."
   links:
     # - label: "Website"
