@@ -2,7 +2,7 @@
 title: "2021-10-11-Transformer-decoder-padding"
 date: 2021-10-11T15:34:30-04:00
 categories:
-  - NLP
+  - nlp
 tags:
   - Transformer
   - padding

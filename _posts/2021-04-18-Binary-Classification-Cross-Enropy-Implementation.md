@@ -2,7 +2,7 @@
 title: "Binary-Classification-Cross-Enropy-Implementation"
 date: 2021-04-18T15:34:30-04:00
 categories:
-  - DeepLearning
+  - deep-learning
 
 tags:
   - cross entropy

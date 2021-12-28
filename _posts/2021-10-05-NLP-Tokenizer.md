@@ -2,10 +2,12 @@
 title: "1005-Implementing-NLP-tokenizer"
 last_modified_at: 2021-08-18T16:20:02-05:00
 categories:
-  - NLP
-  - Tokenizer
-  - Preprocessing
+  - nlp
+  - deep-learning
 tags:
+  - Tokenizer
+  - pytorch
+  - Preprocessing
   - tokenizer
   - NLP
 ---

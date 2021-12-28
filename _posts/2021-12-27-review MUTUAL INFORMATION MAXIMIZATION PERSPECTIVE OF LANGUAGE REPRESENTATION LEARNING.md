@@ -1,5 +1,5 @@
 ---
-title: "1115-A MUTUAL INFORMATION MAXIMIZATION PERSPECTIVE OF LANGUAGE REPRESENTATION LEARNING"
+title: "MUTUAL INFORMATION MAXIMIZATION PERSPECTIVE OF LANGUAGE REPRESENTATION LEARNING"
 last_modified_at: 2021-11-09T16:20:02-05:00
 categories:
   - deep-learning
@@ -13,7 +13,6 @@ tags:
 
 # A MUTUAL INFORMATION MAXIMIZATION PERSPECTIVE OF LANGUAGE REPRESENTATION LEARNING
 
-* 개인적인 **감상평**이 많이 포함되어 있습니다... 주의
 
 * 제목
 왠지... 학습을 할때 information의 정보 교환이 상호작용할 것 같다? 마치 self attention과 같은... 메커니즘? 그렇게 해서 상호작용을 극대화한다는 점에서 maximization이라고 한게 아닐까?
