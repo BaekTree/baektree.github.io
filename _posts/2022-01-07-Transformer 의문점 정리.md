@@ -1,19 +1,14 @@
----
-title: "Transformer 의문점 정리"
-last_modified_at: 2022-01-07T16:20:02-05:00
-categories:
-  - deep-learning
-  - paper-review
-  - nlp
-tags:
-  - DeepLearning
-  - review
-  - paper
----
-
 # Transformer 의문점 정리
 
-## 알고 있었던 내용 1.
+## 궁금한 내용
+
+1. pad mask을 구현할 때, 실제로 어떻게 masking이 되는지? → 해결!
+2. auto-regressive한 디코더를 만들기 위해서 masked self attention을 함. 뒤의 내용을 모르는 상태에서 예측하는 훈련임. 근데 실제 학습할 때는 이걸 동시에 triangular mask으로 수행함. 동시에 하는데 이렇게 굳이학습할 필요가 있나? 여기에 대해서 구체적인 흐름을 살펴보고 직관적인 설명을 달아보고자 함
+3. 논문에서와 구현할 때 multi head attention의 의미가 조금 다른 것 같음. 논문에서는 h_model을 다른 멀티 헤드로 보낼 때 linear layer 넣어서 축소해서 여러 head에 넣는다. 구현에서는 linear에 넣을 때 d_model로 들어가서 d_model으로 나옴. 그 다음에 d_model을 쪼개서 sub vectorspace으로 나눈 다음에 multihead attention에 각각 집어넣음. 
+
+# 1. pad mask 구현
+
+## a. 알고 있었던 내용
 
 transformer에 마스크가 두 종류가 있음. pad mask와 triangular mask. pad mask는 input text에서 max_seq_length보다 짧으면 그 부분을 pad token으로 채움. decoder의 경우 디코더 train data의 pad mask와 함께 masked self attention에 사용할 mask가 하나 더 필요함. (seq_len, seq_len) 크기의 triangular mask가 들어감. 
 
@@ -49,6 +44,8 @@ def create_mask(data, pad_idx):
 
 ```
 
+## b. 궁금했던 부분: Q와 K에 둘다 padding이 있는데 한 방향만 masking을 적용해도 괜찮을까?
+
 그런데 사실 아주 많은 구현체들에서 이렇게 않하고 그냥 하나만 만들어둔다... 이렇게 하면 어떻게 K의 transpose에 그래도 남아있는 pad을 마스킹할 수 있는건지?
 
 ```python
@@ -57,9 +54,7 @@ def create_mask(data, pad_idx):
 pad_mask = torch.tensor( masktok_sen != pad_idx )
 ```
 
-# 궁금했던 부분1: Q와 K에 둘다 padding이 있는데 한 방향만 masking을 적용해도 괜찮을까?
-
-# 공부한 부분1:
+## c. 공부한 부분:
 
 - 결론 먼저 말하자면, 괜찮다. 왜? 일단 한 방향으로 패딩을 하면 분명이 다른 방향의 패딩은 남는데, loss을 구할 때 Cross Entropy을 사용하고 이때 ignore_index으로 pad가 ground truth인 토큰을 학습하지 않음.
 - 차근 차근 알아보기
@@ -69,7 +64,6 @@ pad_mask = torch.tensor( masktok_sen != pad_idx )
 1. 각 토큰이 인코더로 들어와서 linear layer을 거쳐, Q, K, V으로 변환된 상태이다. masking 텐서는 [1,1,1,1,0]의 형태를 가질 것이다.
 
 ![Q](/assets/src/transformer/Untitled.png)
-
 Q
 
 1. K도 Q와 동일한 텐서이고 내적을 위해서 transpose만 하면 이런 모양이 된다. 마스킹이 되어야 하는 부분을 빨강과 파랑으로 표현.
@@ -140,17 +134,66 @@ v
 
 ![Untitled](/assets/src/transformer/Untitled 15.png)
 
-1. tri mask을 적용한 직관적인 의미: 2번째 토큰은 2번째까지만 문맥 반영해서 hidden represent가 됨. 3번째까지 문맥 반영해서 hidden represent. e.g. 1번째 토큰이 내적될 때, V에서 자기 자신에 해당하는 곳 말고는 마스킹 때문에 적용이 안됨
+1. tri mask을 적용한 직관적인 의미: 2번째 토큰은 2번째까지만 문맥 반영해서 그 feature을 vector에 represent 한다. 3번째까지 문맥 반영해서 hidden represent. e.g. 1번째 토큰이 내적될 때, V에서 자기 자신에 해당하는 곳 말고는 마스킹 때문에 적용이 안됨.
 
 ![Untitled](/assets/src/transformer/Untitled 16.png)
 
 1. 최종적으로 디코더를 통과해서 나오는 행렬은 (len, hidden_dimension)이다. 마지막 linear layer을 타고 넘어가서 (len, num_token) 행렬이 나옴. 그리고 softmax을 걸어서 가장 높은 값으로 estimate 한다. 이때 반환 값은 index 값이다. 이 값이 모델의 최종 output이다. 그리고 이 값이 loss에 ground truth와 함께 넘어간다. 15번 최종 결과에서 나오는 패딩 row 이 과정 속에 그대로 포함되어 있다. 하지만 loss에 들어갈 때 argument으로 함께 넣는 CrossEntropy(output, target, ingnore_index = pad_idx)을 함께 넣으면, 실제 pad 위치인 빨강 row의 index는 학습에 사용하지 않고 그냥 무시함. 
 2. 이렇게 인코더의 패딩이 한 방향만 있을 때 발생하는 문제점은 디코더에서 소멸되고, 디코더에서 남아있는 패딩은 loss에서 무시하면서 해겨얼!
 
-## 궁금한 내용
+# 2. 디코더 self attention의 triangular mask의 직관적 의미
 
-1. pad mask을 구현할 때, 실제로 어떻게 masking이 되는지? → 해결!
-2. auto-regressive한 디코더를 만들기 위해서 masked self attention을 함. 뒤의 내용을 모르는 상태에서 예측하는 훈련임. 근데 실제 학습할 때는 이걸 동시에 triangular mask으로 수행함. 동시에 하는데 이렇게 굳이학습할 필요가 있나? 여기에 대해서 구체적인 흐름을 살펴보고 직관적인 설명을 달아보고자 함.
-3. 논문에서와 구현할 때 multi head attention의 의미가 조금 다른 것 같음. 논문에서는 h_model을 다른 멀티 헤드로 보낼 때 linear layer 넣어서 축소해서 여러 head에 넣는다. 구현에서는 linear에 넣을 때 d_model로 들어가서 d_model으로 나옴. 그 다음에 d_model을 쪼개서 sub vectorspace으로 나눈 다음에 multihead attention에 각각 집어넣음. 
+## a. 배경
 
-##
+auto-regressive한 디코더를 만들기 위해서 masked self attention을 함. 뒤의 내용을 모르는 상태에서 예측하는 훈련임. 근데 실제 학습할 때는 이걸 동시에 triangular mask으로 수행함. 
+
+## b. 의문
+
+동시에 하는데 이렇게 굳이학습할 필요가 있나?
+
+## c. 생각해본내용
+
+tri mask을 적용한 직관적인 의미: . e.g. 1번째 토큰이 내적될 때, V에서 자기 자신에 해당하는 곳 말고는 마스킹 때문에 적용이 안됨. 따라서 output 행렬의 1번째 row의 의미는 그대로 나옴. 2번째 row는 2번째까지만 문맥 반영해서 hidden represent가 됨. 3번째까지 문맥 반영해서 hidden representation이 된다. 그래서 output은 각 토큰까지만 문맥을 반영한 hidden representation이라고 말할 수 있음. 이 과정은 디코더의 self attention에만 적용 된다. 이 결과가 Q 행렬이 되고, K와 V는 인코더에서 나옴. 인코더의 K와 V는 전체 모든 맥락을 다 포함해서 hidden representaion되어 있음. 디코더의 각 토큰과 가장 의미가 유사한 V의 각 토큰에 hidden representation에 누적되어 혼합 됨. 이때 현재 토큰의 위치까지의 feature에서 가장 유사한 정보들만을 인코더에서 가지고 올 수 있게 됨. 그래서 디코더의 특징이 그대로 유지된다. 이대로 반복되면서 최종 output 까지 감.
+
+![Untitled](/assets/src/transformer/Untitled 16.png)
+
+![Untitled](/assets/src/transformer/Untitled 15.png)
+
+# 3. multihead attention의 구현과 개념이 다름?
+
+## a. 배경
+
+논문에서와 구현할 때 multi head attention의 의미가 조금 다른 것 같음. 
+
+논문에서는 h_model을 다른 멀티 헤드로 보낼 때 
+
+Q,K,V을 각 i번째 linear layer 넣어서 축축소고, i번째 head에 넣는다. h개의 linear layyer와 h개의 head가 있음.
+
+$$
+MultiHead(Q, K, V ) = Concat(head_1, ..., head_h)W^O \\
+
+\text{ where } head_i = Attention(QW_i^Q, KW_i^K, V W_i^V)
+$$
+
+$$
+\text{Where the projections are parameter matrices } W_i^Q \in R^{d_{model}×d_k} , W_i^K \in R ^{d_{model}×d_k} , W_i^V \in R^{d_{model}×d_v} and W_O \in R^{hd_v×d_{model}}
+$$
+
+ 구현에서는 linear에 넣을 때 d_model로 들어가서 d_model으로 나옴. 그 다음에 d_model을 쪼개서 sub vectorspace으로 나눈 다음에 multihead attention에 각각 집어넣음. 
+
+```jsx
+# given Q, K, V # (B, max_len, d_model)
+Q = fc(Q) # (B, max_len, d_model)
+Q = Q.view(B, max_len, num_head, d_k).transpose(1,2) # (B, num_nead, max_len, d_k)
+Q, K, V = multihead(Q,K,V)
+Q = Q.transpose(1,2).view(B, max_len, d_model)
+
+def multihead(Q, K, V):
+		return softmax( Q.matmul(K.T).masked_fill(mask) ).matmul(V) / sqrt(Q)
+```
+
+공부한 내용: 그런데 사실 이 두 내용은 동일하다. 논문에서는 동일한 Q을 h개의 linear으로 통과시키고 각 차원은 d_model에서 d_k으로 줄어든다. 구현에서는 동일한 Q을 linear layer으로 통과시키고 h개로 나눈다. 
+
+텐서의 모양을 살펴보면 알 수 있음. 가운제 weight matrix 의 차원이 d_model인데, d_k으로 column을 쪼개면, Q와 내적될 때 독립적으로 내적 됨. 각각의 d_k가 w_i가 된다. 
+
+![SmartSelect_20220109-160222_Samsung Notes.jpg](/assets/src/transformer/SmartSelect_20220109-160222_Samsung_Notes.jpg)
