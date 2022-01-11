@@ -1,6 +1,6 @@
 ---
 title: "attention-is-not-explanation-review"
-last_modified_at: 2021-10-12T16:20:02-05:00
+last_modified_at: 2022-01-10T16:20:02-05:00
 categories:
   - nlp
   - paper-review
