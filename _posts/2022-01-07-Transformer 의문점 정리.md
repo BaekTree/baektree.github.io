@@ -1,3 +1,15 @@
+---
+title: "Transformer 의문점 정리"
+last_modified_at: 2022-01-07F16:20:02-05:00
+categories:
+  - nlp
+  - paper-review
+tag:
+  - transformer
+  - paper
+  - NLP
+---
+
 # Transformer 의문점 정리
 
 ## 궁금한 내용
