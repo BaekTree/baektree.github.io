@@ -58,7 +58,8 @@ $$
 loss(x1,x2,y)=max(0,−y∗(x1−x2)+margin)
 $$
 
-이렇게 하면 위에 적은 최종 공식이랑 조금 다름. $-y$ term이 추가 됨. 그런데 이 부분은 그냥 x1와 x2 중에 어느 것이 positive이고 negative인지 나타낼 때 쓰는 거임. 위에 적은 $L(a, p, n) = max( 0, d(a, p) - d(a, n) + m )$에서 $d(a, p)$이랑 $d(a, n)$ 중에 ground truth 값은 앞항이 작고, 뒤 항이 커야 함. 그래서 $d(a, p) - d(a, n)$값이 negative가 나와야 잘 나오고 있는 것. 그래서 pytorch의 경우도, x1이 작아야 하는 갑싱고 x2가 커야 하는 값이면 x1-x2가 negative가 되어야 함. 따라서 y의 값이 1이 되어야 한다. 만약 반대로 x1이 커야 하고 x2가 작아야 하는 값이면 y값을 -1을 두면 됨. 
+이렇게 하면 위에 적은 최종 공식이랑 조금 다름. $-y$ term이 추가 됨. 그런데 이 부분은 그냥 x1와 x2 중에 어느 것이 positive이고 negative인지 나타낼 때 쓰는 거임. 
+위에 적은 $L(a, p, n) = max( 0, d(a, p) - d(a, n) + m )$의 예시를 보면, $d(a, p)$이랑 $d(a, n)$ 중에 ground truth 값은 앞항이 작고, 뒤 항이 커야 함. 그래서 $d(a, p) - d(a, n)$값이 negative가 나와야 잘 나오고 있는 상태라고 했음. pytorch의 수식에 적용하면, x1이 작아야 하는 갑싱고 x2가 커야 하는 값이면 x1-x2가 negative가 되어야 함. 따라서 y의 값이 -1이 되어야 -y가 positive가 되고 x1-x2가 negative으로 유지된다.만약 반대로 x1이 커야 하고 x2가 작아야 하는 값이면 y값을 1을 두면 됨. 
 
 [https://pytorch.org/docs/stable/generated/torch.nn.MarginRankingLoss.html](https://pytorch.org/docs/stable/generated/torch.nn.MarginRankingLoss.html)
 
