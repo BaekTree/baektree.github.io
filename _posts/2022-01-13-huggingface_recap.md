@@ -35,26 +35,6 @@ roberta -> gpt tokenizer -> PreTrainedTokenizer -> PreTrainedTokenizerBase으로
 
 https://github.com/huggingface/transformers/blob/v4.15.0/src/transformers/tokenization_utils.py
 
-# wandb table
-
-```python
-# assume a model has returned predictions on four images
-# with the following fields available:
-# - the image id
-# - the image pixels, wrapped in a wandb.Image()
-# - the model's predicted label
-# - the ground truth label
-my_data = [
-  [0, wandb.Image("img_0.jpg"), 0, 0],
-  [1, wandb.Image("img_1.jpg"), 8, 0],
-  [2, wandb.Image("img_2.jpg"), 7, 1],
-  [3, wandb.Image("img_3.jpg"), 1, 1]
-]
-          
-# create a wandb.Table() with corresponding columns
-columns=["id", "image", "prediction", "truth"]
-test_table = wandb.Table(data=my_data, columns=columns)
-```
 
 ref
 https://huggingface.co/docs/transformers/main_classes/tokenizer
