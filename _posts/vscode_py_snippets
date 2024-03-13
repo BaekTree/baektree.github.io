@@ -1,0 +1,134 @@
+{
+	// Place your snippets for python here. Each snippet is defined under a snippet name and has a prefix, body and 
+	// description. The prefix is what is used to trigger the snippet and the body will be expanded and inserted. Possible variables are:
+	// $1, $2 for tab stops, $0 for the final cursor position, and ${1:label}, ${2:another} for placeholders. Placeholders with the 
+	// same ids are connected.
+	// Example:
+	// "Print to console": {
+	// 	"prefix": "log",
+	// 	"body": [
+	// 		"console.log('$1');",
+	// 		"$2"
+	// 	],
+	// 	"description": "Log output to console"
+	// }
+	"debug pdb pprint trace": {
+		"prefix": ">pdbpp",
+		"body": [
+			"from pprint import pprint;import pdb;\ndef cls():print('\\n'*30);return None;\npdb.set_trace()",
+			"$2"
+		],
+		"description": "pdb"
+	},
+	"import pdb": {
+		"prefix": ">idb",
+		"body": [
+			"import pdb",
+			"$2"
+		],
+		"description": "pdb"
+	},
+	"trace": {
+		"prefix": ">tr",
+		"body": [
+			"pdb.set_trace()",
+			"$2"
+		],
+		"description": "pdb"
+	},
+	"write_json": {
+		"prefix": ">jw",
+		"body": [
+			"#AreYouWriting?\nimport json\nwith open('.json','w', encoding='utf-8') as f:\n\tjson.dump(d, f, ensure_ascii=False, indent=4)",
+			"$2"
+		],
+		"description": "json write"
+	},
+	"import_jupyter_math": {
+		"prefix": ">math",
+		"body": [
+			"from IPython.display import display, Math, Latex",
+			"$2"
+		],
+		"description": "json write"
+	},
+
+
+	"logg": {
+		"prefix": ">logg",
+		"body": [
+			"import os\nimport logging\nLOGGING_DIR=\"\"\ndef setup_logger(logger_name, log_file, level=logging.CRITICAL):\n\tos.makedirs(LOGGING_DIR, exist_ok=True)\n\tl = logging.getLogger(logger_name)\n\tformatter = logging.Formatter('%(message)s')\n\tfileHandler = logging.FileHandler(\n\t	os.path.join(LOGGING_DIR, log_file), mode='w')\n\tfileHandler.setFormatter(formatter)\n\tl.setLevel(level)\n\tl.addHandler(fileHandler)\nfrom time import time\nsetup_logger(\"solution_logger\", \"logg.log\")\nlogger = logging.getLogger('solution_logger')\n",
+			"$2"
+		],
+		"description": "json write"
+	},
+
+	"date": {
+		"prefix": ">date",
+		"body": [
+			"from datetime import datetime\nDATE = datetime.today().strftime(\"%y%m%d_%H%M\")",
+			"$2"
+		],
+		"description": "json write"
+	},
+
+
+	"tmp_save": {
+		"prefix": ">save",
+		"body": [
+			"importos\nos.path.dirname(os.path.abspath(__file__))\n\tFIME_NAME = \"\"\n\tTMP_FILE_NAME = \"latex_sol_dicts_tmp.txt\"\n\t#AreYouWriting?\n\timport json\n\twith open(TMP_FILE_NAME,'w', encoding='utf-8') as f:\n\t\tf.write(\"[\")\n\tidx = -1\n\tlatex_sol_dicts = []\n\tfor sol_dic in tqdm(sol_dicts, total = len(sol_dicts)):\n\t\tidx += 1\n\t\ttry:\n\t\t\t# your code\n\t\texcept Exception as e:\n\t\t\t# your code\n\t\t\n\t\t#AreYouWriting?\n\t\timport json\n\t\twith open(TMP_FILE_NAME,'a', encoding='utf-8') as f:\n\t\t\tf.write(str(sol_dic))\n\t\t\t\n\t\t\tif idx < len(sol_dicts)-1:\n\t\t\t\tf.write(\",\")\n\t\t\telse:\n\t\t\t\tf.write(\"]\")\n\t\t\n\twith open(TMP_FILE_NAME,'r', encoding='utf-8') as f:\n\t\tlines = \"\".join(f.readlines())\n\t\tlines = eval(lines)\n\t\t\t\n\t#AreYouWriting?\n\timport json\n\ttry:\n\t\twith open(f'{FIME_NAME}.json','w', encoding='utf-8') as f:\n\t\t\tjson.dump(lines, f, ensure_ascii=False, indent=4)\n\texcept:\n\t\twith open(f'{FIME_NAME}.txt','w', encoding='utf-8') as f:\n\t\t\tjson.dump(str(lines), f, ensure_ascii=False, indent=4)\t\t\n\t \n",
+			"$2"
+		],
+		"description": "json write"
+	},
+
+
+	"mp": {
+		"prefix": ">mp",
+		"body": [
+			"import parmap\nfrom multiprocessing import Manager    \nnum_cores = 120  # 사용할 cpu 코어 수. multiprocessing.cpu_count() 로 확인 가능\nmanager = Manager()\npara_list = manager.list()\ndef para_align_eng_exp(instance, para_list):\n	try:\n		# your code here\n	except Exception as e:\n		# your code here\n	para_list.append(instance)\nparmap.map(\n	para_align_eng_exp, file, para_list, pm_pbar=True, pm_processes=num_cores\n)\n",
+			"$2"
+		],
+		"description": "json write"
+	},
+
+	"para": {
+		"prefix": ">enum",
+		"body": [
+			"from enum import Enum\nclass Color(Enum):\n	RED = 1\n	GREEN = 2\n	BLUE = 3",
+			"$2"
+		],
+		"description": "json write"
+	},	
+	"deco": {
+		"prefix": ">deco",
+		"body": [
+			"\ndef decorator_function(original_function):\n\tdef wrapper_function():\n\t\tprint('{} 함수가 호출되기전 입니다.'.format(original_function.__name__))\n\t\treturn original_function()\n\treturn wrapper_function\n@decorator_function\ndef display():\n\tprint('display 함수가 실행됐습니다.')\n@decorator_function\ndef display_info(name, age):\n\tprint('display_info({}, {}) 함수가 실행됐습니다.'.format(name, age))\ndisplay()\nprint()\ndisplay_info('John', 25)",
+			"$2"
+		],
+		"description": "json write"
+	},	
+
+	"tqdm_apply": {
+		"prefix": ">tqdm_apply",
+		"body": [
+			"from tqdm import tqdm\ntqdm.pandas()\nprob_meata_df.progress_apply(apply_, axis=1)",
+			"$2"
+		],
+		"description": "json write"
+	},		
+
+	"save_func": {
+		"prefix": ">save_func",
+		"body": [
+			"def save_iter(\n    iterable, function_for_element, file_name, delimeter=\"######new_data######\"\n):\n    import os\n    import json\n    from tqdm import tqdm\n    from datetime import datetime\n\n    DATE = datetime.today().strftime(\"%y%m%d_%H%M\")\n\n    os.path.dirname(os.path.abspath(__file__))\n    file_name = file_name + f\"{DATE}\"\n    file_name_tmp = file_name + \"_tmp.txt\"\n    # AreYouWriting?\n    with open(file_name_tmp, \"w\", encoding=\"utf-8\") as f:\n        f.write(\"[\")\n    idx = -1\n    for element in tqdm(iterable, total=len(iterable)):\n        idx += 1\n        try:\n            # your code\n            element_result = function_for_element(element)\n        except Exception as e:\n            element_result = \"error\"\n            # your code\n\n        # AreYouWriting?\n        with open(file_name_tmp, \"a\", encoding=\"utf-8\") as f:\n            f.write(str(element_result))\n\n            if idx < len(iterable) - 1:\n                f.write(delimeter)\n            else:\n                f.write(\"]\")\n\n    with open(file_name_tmp, \"r\", encoding=\"utf-8\") as f:\n        lines = \"\".join(f.readlines())\n        lines = eval(lines)\n\n    # AreYouWriting?\n    try:\n        with open(f\"{file_name}.json\", \"w\", encoding=\"utf-8\") as f:\n            json.dump(lines, f, ensure_ascii=False, indent=4)\n    except:\n        with open(f\"{file_name}.txt\", \"w\", encoding=\"utf-8\") as f:\n            json.dump(str(lines), f, ensure_ascii=False, indent=4)\n\n",
+			"$2"
+		],
+		"description": "json write"
+	},		
+
+
+	
+}
+
+
