@@ -1,5 +1,5 @@
 ---
-title: "DPO 직관 + 수학 review"
+title: "DPO review"
 last_modified_at: 2022-01-19M16:20:02-05:00
 categories:
   - nlp
