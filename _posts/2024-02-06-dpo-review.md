@@ -9,11 +9,6 @@ tag:
   - NLP
 ---
 
-# 이런 연구를 하시는 분들에게 추천: 
-
-- 모델의 hallucination을 잡아야 하시는 분
-- hidden representation을 사용해서 hallucination 오류를 개선하려고 시도하시는 분
-- computing requirements: error detection에 LLM 하나와 소형 classifier 하나가 필요해요
 # DPO
 
 한줄 요약: HFRL할때 reward 모델 재끼고 선호 데이터셋만 있으면 바로 학습 가능.
