@@ -39,7 +39,7 @@ TDLR;
     - BT model은 사람의 preference distsribution을 이렇게 정의함.
     - **식 1: preference probability**
         
-      ![Untitled](assets/src/DPO/Untitled.png)
+      <!-- ![Untitled](assets/src/DPO/Untitled.png) -->
         
     
     - example 2개가 있을 때 y1을 y2 보다 사람이 더 선호할 확률은 각 y1, y2에 대한 latent reward model이 정한 점수의 softmax이다. 이 확률도 latent에서 나온 가상의 혹은 맞춰야 하는 확률분포이다. 이 확률분포가 모방해야 하는 r*에 연동되어 있음. 그래서 r*을 잘 모방하면 이 선호확률도 예측할 수 있다.
@@ -47,7 +47,7 @@ TDLR;
     - 따라서 다음의 objective을 minimize하면 된다.
     - **식2: reward network 학습 목적 함수**
         
-        ![Untitled](assets/src/DPO/Untitled 1.png)
+        <!-- ![Untitled](assets/src/DPO/Untitled 1.png) -->
         
         - 좋은 output이 안좋은 ouptut 보다 크면 값이 커진다. 확률 값이 커진다. GT는 1이다. 1과 실제 확률 값의 분포가 클수록 cross entropy는 올라가고 loss 값은 커진다.
     - r pi는 SFT로부터 initiallized 되고 r_pi network을 학습하면 된다. r pi는 마지막에 scalar layer을 하나 추가하면 됨.
@@ -58,14 +58,14 @@ TDLR;
     - 근데 이때 어떤 한 값의 reward가 잘 나오면 그 값만 나오게 될수 있음. 그래서 reference 모델과 분포 차이 만큼 조금 깎아주면서 학습한다.
     - **식3: policy network 목적 함수**
         
-        ![Untitled](assets/src/DPO/Untitled 2.png)
+        <!-- ![Untitled](assets/src/DPO/Untitled 2.png) -->
         
 
 - PPO을 통해서 학습 함.
     - 이 식은 PPO 논문에서 다음 식과 같은 의미
     - instructGPT 논문: [https://arxiv.org/pdf/1707.06347.pdf](https://arxiv.org/pdf/1707.06347.pdf)
     
-    ![Untitled](assets/src/DPO/Untitled 3.png)
+    <!-- ![Untitled](assets/src/DPO/Untitled 3.png) -->
     
     - PPO으로 학습한다 = 너무 과도하지 않게 reward을 계산한다.
         - PPO 논문:
@@ -76,18 +76,18 @@ TDLR;
         - (state value network - V target): 평균 보다 sampling 된 것이 더 reward가 좋다면 더 자주 나오도록 학습함. 그래서 Clipping을 걸어준다. (loss 2)
         - explore 하도록 Entropy 값을 loss에 추가함 (loss 3)
             
-            ![Untitled](assets/src/DPO/Untitled 4.png)
+            <!-- ![Untitled](assets/src/DPO/Untitled 4.png) -->
             
         - 너무 과도하게 업데이트하지 않도록 clipping
             
-            ![Untitled](assets/src/DPO/Untitled 5.png)
+            <!-- ![Untitled](assets/src/DPO/Untitled 5.png) -->
             
         - 근데 대신 이렇게 쓸수도 있다. 같은 직관이고 정확히 같지는 않지만 같은 역할을 함. 이게 사실 instructGPT에 나온 수식. 사실 이렇게 구하나 cliping을 구하나 역할이 같다.
             - 평균 보다 sampling 된 것이 더 reward가 좋다면 더 자주 나오도록 학습함(A_t)
             - 너무 과도하게 update가 되지 않도록, 지난번 확률 값으로 나눠서 보정을 해준다.
             - reference에서 너무 멀어지지 않도록 값을 좀 깎는다.
             
-            ![Untitled](assets/src/DPO/Untitled 6.png)
+            <!-- ![Untitled](assets/src/DPO/Untitled 6.png) -->
             
 
 ### 4. Direct Preference Optimization
@@ -99,25 +99,25 @@ TDLR;
         - policy 함수를 최적화할때
         - 최적화 되기 위한 조건이 바로 식 4이다.
     
-    ![Untitled](assets/src/DPO/Untitled 7.png)
+    <!-- ![Untitled](assets/src/DPO/Untitled 7.png) -->
     
-    ![Untitled](assets/src/DPO/Untitled 8.png)
+    <!-- ![Untitled](assets/src/DPO/Untitled 8.png) -->
     
     - Appendix A.1
         
         식3 = 식 11
         
-        ![Untitled](assets/src/DPO/Untitled 9.png)
+        <!-- ![Untitled](assets/src/DPO/Untitled 9.png) -->
         
-        ![Untitled](assets/src/DPO/Untitled 10.png)
+        <!-- ![Untitled](assets/src/DPO/Untitled 10.png) -->
         
         reward는 사실상 상수이다. 학습에 사용하지 않음. 저 크기 많은 policy에 업데이트 함. 방향에서는 변화가 없음. 1 / beta을 곱한다. -1을 곱해서 max 에서 min으로 바꿈.
         
-        ![Untitled](assets/src/DPO/Untitled 11.png)
+        <!-- ![Untitled](assets/src/DPO/Untitled 11.png) -->
         
         간결하게 하기 위해 치환 Z
         
-        ![Untitled](assets/src/DPO/Untitled 12.png)
+        <!-- ![Untitled](assets/src/DPO/Untitled 12.png) -->
         
         Z 대입
         
@@ -131,24 +131,24 @@ TDLR;
             - Z 안의 $\sum \pi_{ref}=1.$
             - $\log \exp = 1$으로 원래 식의 $\frac 1 \beta r(x, y)$만 남는다.
         
-        ![Untitled](assets/src/DPO/Untitled 13.png)
+        <!-- ![Untitled](assets/src/DPO/Untitled 13.png) -->
         
-        ![Untitled](assets/src/DPO/Untitled 14.png)
+        <!-- ![Untitled](assets/src/DPO/Untitled 14.png) -->
         
         - partition function을 변수로 치환함
             
-            ![Untitled](assets/src/DPO/Untitled 15.png)
+            <!-- ![Untitled](assets/src/DPO/Untitled 15.png) -->
             
         - 다시 식 12에 넣으면
             
-            ![Untitled](assets/src/DPO/Untitled 16.png)
+            <!-- ![Untitled](assets/src/DPO/Untitled 16.png) -->
             
         - optmize하는 pi가 Z(x)에 대해 없어서 KL div term으로 optimize 한다.
         - 이때 Gibbs inequaility: KL div = 0 where two distribution identitcal. 따라서
         
-        ![Untitled](assets/src/DPO/Untitled 17.png)
+        <!-- ![Untitled](assets/src/DPO/Untitled 17.png) -->
         
-        ![Untitled](assets/src/DPO/Untitled 18.png)
+        <!-- ![Untitled](assets/src/DPO/Untitled 18.png) -->
         
         가 되도록 parameter이 이동하면 최적화된다. 
         
@@ -164,13 +164,13 @@ TDLR;
 - 식 4에log 씌우고 계산을 좀 하면 다음과 같이 됨. 즉 optimal reward 함수를 구하는 것 = policy network을 구하는것과 동일해진다!
 - **식5: optimal reward network 최적화 = optimal policy network**
     
-    ![Untitled](assets/src/DPO/Untitled 19.png)
+    <!-- ![Untitled](assets/src/DPO/Untitled 19.png) -->
     
 
 - BT 모델에서 구하는 선호 확률은 reward 모델을 sigmoid 한 것. 식 1(식 1: preference probability)에 식 5를 그대로 대입하면 (혹은 appendix A2) 식6.
 - **식6: 선호 확률을 optimal reward 대신에 optimal policy network으로 표현함.**
     
-    ![Untitled](assets/src/DPO/Untitled 20.png)
+    <!-- ![Untitled](assets/src/DPO/Untitled 20.png) -->
     
 
 - 따라서 이제 optimal policy network을 구하면 사람의 선호 확률을 구할 수 있다.  = optimal reward을 구하면 optimal policy network을 알 수 있다. 둘중 하나만 구하면 됨.
@@ -178,7 +178,7 @@ TDLR;
     - 식 2(식2: reward network 학습 목적 함수)는 reward을 최적화하는 식임. 여기에 식 5는 reward을 policy network으로 표현함. 그래서 식2에 식 5을 그대로 대입하고 조금 정리하면
     - **식7: reward network 최적화(식2)를 policy network(식5)으로 표현함. (혹은 A3)**
         
-        ![Untitled](assets/src/DPO/Untitled 21.png)
+        <!-- ![Untitled](assets/src/DPO/Untitled 21.png) -->
         
 
 **5 Theoretical Analysis of DPO**
@@ -197,7 +197,7 @@ TDLR;
             - 직관: 입력 x에 대한 모델 랜덤 변수 함수 y에서, 여러 y 값의 선호 확률에 대하여, 입력 x에 대한 함수의 선형 변환이 있어도(=같은 class에 속함) 선호 확률은 변화가 없다.
             - 증명: 2,3 줄은 1번 줄에 $\frac{exp(f(x))}{exp(f(x))}$을 곱하고 summation 안으로 분배법칙을 씀.
                 
-                ![Untitled](assets/src/DPO/Untitled 22.png)
+                <!-- ![Untitled](assets/src/DPO/Untitled 22.png) -->
                 
             - Lemma1으로 인해 eq2에서 reward loss을 감소시켜서 reward model을 학습 시킬 때 identifiability 제약이 필요함.
         
@@ -214,7 +214,7 @@ TDLR;
             - 약분 됨.
             - reward에서 선형변환된 다른 reward의 optimal policy network와 같아짐.
             
-            ![Untitled](assets/src/DPO/Untitled 23.png)
+            <!-- ![Untitled](assets/src/DPO/Untitled 23.png) -->
             
         - lemma2으로 인해 어떤 reward의 optimal policy을 알고 싶을 때 동일 class의 임의의 reward function의 optimal policy을 구할 수도 있음.
         - discussion:
@@ -224,17 +224,17 @@ TDLR;
     - **Theorem: same eq에 속하는 모든 reward는 사실 어떤 optimal policy network으로 표현될 수 있다.**
         - Llackett-Luce 군에 속하는 모든 reward 함수는 policy network와 reference policy network으로 표현할 수 있음. 완전히 동일한 의미를 가짐.
             
-            ![Untitled](assets/src/DPO/Untitled 24.png)
+            <!-- ![Untitled](assets/src/DPO/Untitled 24.png) -->
             
         - reward 함수를 reparameterize 하는 사상함수 f를 정의
             
-            ![Untitled](assets/src/DPO/Untitled 25.png)
+            <!-- ![Untitled](assets/src/DPO/Untitled 25.png) -->
             
-            ![Untitled](assets/src/DPO/Untitled 26.png)
+            <!-- ![Untitled](assets/src/DPO/Untitled 26.png) -->
             
-            ![Untitled](assets/src/DPO/Untitled 27.png)
+            <!-- ![Untitled](assets/src/DPO/Untitled 27.png) -->
             
-            ![Untitled](assets/src/DPO/Untitled 28.png)
+            <!-- ![Untitled](assets/src/DPO/Untitled 28.png) -->
             
         - 그냥 x에 대해 이동시킴
         - 근데 definition에 의해서 이동시켜도 equivalent하다. 따라서 이동시켜도 optimal policy network을 가진다(lemma2).
@@ -242,7 +242,7 @@ TDLR;
             - 어떤 reward $r$이 있고 이 reward는 $\pi_r$에 대한 term과 $r$에 종속된 $Z(x)$ 만큼의 이동 값으로 표현될 수 있음(식5: optimal policy network으로 reward을 표현. ← 식 4: reward을 최적화할 때 optimal policy network 가 파생 됨)
             - 이 optimal policy network는 reward에서 $\beta \log Z(x)$만큼 떨어진 다른 reward을 표현할 수 있다.
                 
-                ![Untitled](assets/src/DPO/Untitled 29.png)
+                <!-- ![Untitled](assets/src/DPO/Untitled 29.png) -->
                 
             - discussion: lemma2와 차이점
                 - lemma2: same equivalance class에 속하는 두 reward들은 (혹은 두개씩 따왔을 모든 pair들은) 최적화하면 동일한 optimal policy network을 가진다.
@@ -251,7 +251,7 @@ TDLR;
     
     더 엄밀하게 살펴보기. **proposition: 사실 equivalent class에 있는 모든 reward는 단 하나만 존재한다. 그리고 각 reward에 연결되어 있는 optimal policy network도 하나이기 때문에 equivalant class에는 단 하나의 optimal policy network만 가지고 있다.** 
     
-    ![Untitled](assets/src/DPO/Untitled 30.png)
+    <!-- ![Untitled](assets/src/DPO/Untitled 30.png) -->
     
     - 따라서  reward 함수의 loss을 감소시키는 것은 policy network의 loss을 감소시키는 것과 동일하다. 따라서 식 7에서 reward model을 최적화하는 역할로 policy network을 최적화하는 것이 정당화된다.
     - 증명:
@@ -262,6 +262,6 @@ TDLR;
         - 근데 전개하면 $f(x)=0$이 되어야 함. 따라서 $r_1 = r_2$이고, $\pi_1 = \pi_2$이다. premise가 모순 됨.
         - 따라서 same equivalance class는 단 하나의 reward와 optimal policy network을 가진다.
         
-        ![Untitled](assets/src/DPO/Untitled 31.png)
+        <!-- ![Untitled](assets/src/DPO/Untitled 31.png) -->
         
-        ![Untitled](assets/src/DPO/Untitled 32.png)
+        <!-- ![Untitled](assets/src/DPO/Untitled 32.png) -->
