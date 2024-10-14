@@ -59,7 +59,7 @@ for Improving Reasoning
 
             ![test](/assets/src/resnet/bottleneck.png)
 
-            ![image.png](assets/src/rationalist/image 2.png)
+            ![image.png](/assets/src/rationalist/image 2.png)
             
 - 검증
     - 성능이 많이 뛰어요.
@@ -68,7 +68,7 @@ for Improving Reasoning
     - rationalist 학습할 때 그냥 벤치마크 데이터만 쓰는 것보다는 Pile 데이터에서 더 다양한 reasnoing 을 경험하게 하는 것이 rationlist 성능 향상에 좋아요.
     - 추론 시 explicit한 방법(llm agent가 다음 reasnoing 생성할 때 rationle을 함께 보고 생성함) 보다 implicit한 방법이 더 좋다. 저자들은 이 이유가 rationlist가 실수를 해서 이사한 rationle을 만들었을 때 explicit한 경우는 rationle을 같이 봐서 실수를 알아차리기 어렵다?
         
-        ![image.png](assets/src/rationalist/image 1.png)
+        ![image.png](/assets/src/rationalist/image 1.png)
         
 
 결론
