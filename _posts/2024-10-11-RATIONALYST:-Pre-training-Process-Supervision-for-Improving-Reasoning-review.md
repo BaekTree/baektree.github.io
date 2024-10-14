@@ -53,8 +53,13 @@ for Improving Reasoning
         - llm agent가 trajectory 보고 다음 단계 reasoning candidates N개 생성
         - base LLM이 candidates 마다 타당성을 심사함. 심사할 때 rationle을 참고해서 가장 높은 타당성 점수를 가진 candidate을 Trajectory T에 넣음. 확정된 reasoining step이다.
         - stop condition이 나올때까지 반복함.
-            
-            ![image.png](assets/src/rationalistimage.png)
+
+
+
+
+            ![test](/assets/src/resnet/bottleneck.png)
+
+            ![image.png](assets/src/rationalist/image.png)
             
 - 검증
     - 성능이 많이 뛰어요.
@@ -63,7 +68,7 @@ for Improving Reasoning
     - rationalist 학습할 때 그냥 벤치마크 데이터만 쓰는 것보다는 Pile 데이터에서 더 다양한 reasnoing 을 경험하게 하는 것이 rationlist 성능 향상에 좋아요.
     - 추론 시 explicit한 방법(llm agent가 다음 reasnoing 생성할 때 rationle을 함께 보고 생성함) 보다 implicit한 방법이 더 좋다. 저자들은 이 이유가 rationlist가 실수를 해서 이사한 rationle을 만들었을 때 explicit한 경우는 rationle을 같이 봐서 실수를 알아차리기 어렵다?
         
-        ![image.png](assets/src/rationalistimage%201.png)
+        ![image.png](assets/src/rationalist/image%201.png)
         
 
 결론
