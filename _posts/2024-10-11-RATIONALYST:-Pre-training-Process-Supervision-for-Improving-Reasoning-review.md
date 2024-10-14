@@ -54,11 +54,6 @@ for Improving Reasoning
         - base LLM이 candidates 마다 타당성을 심사함. 심사할 때 rationle을 참고해서 가장 높은 타당성 점수를 가진 candidate을 Trajectory T에 넣음. 확정된 reasoining step이다.
         - stop condition이 나올때까지 반복함.
 
-
-
-
-            ![test](/assets/src/resnet/bottleneck.png)
-
             ![image.png](/assets/src/rationalist/image 2.png)
             
 - 검증
