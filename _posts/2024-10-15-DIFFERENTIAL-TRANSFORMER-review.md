@@ -32,22 +32,22 @@ attention 메커니즘에서 attention 가중치가 불필요한 토큰에 걸�
 - decoder-only model
 - 기본 attention 레이어과 아주 유사함. 어텐션 블럭 자체만 수정하고 나머지 동일하게 트랜스포머 아키텍처 유지함.
     - L개의 diff attention 레이어
-    - 입력 토큰 $x=x_1 \cdots x_N$
-    - 임베딩 레이어에 넣는다. $X^0=\left[\boldsymbol{x}_1, \cdots, \boldsymbol{x}_N\right] \in \mathbb{R}^{N \times d_{\text {model }}}$
-    - 임의의 레이어의 입력 혹은 출력: $X \in \mathbb{R}^{N \times d_{\text {model }}}$
+    - 입력 토큰 $$x=x_1 \cdots x_N$$
+    - 임베딩 레이어에 넣는다. $$X^0=\left[\boldsymbol{x}_1, \cdots, \boldsymbol{x}_N\right] \in \mathbb{R}^{N \times d_{\text {model }}}$$
+    - 임의의 레이어의 입력 혹은 출력: $$X \in \mathbb{R}^{N \times d_{\text {model }}}$$
         - 일반적은 transformer: q,k,v가 들어오면 현재 레이어에서 동일한 embedding 유지하면서 linear layer 한번 태움.
         - diff attention: linear layer 태우는 것은 동일하지만 두개의 attention을 수행함. 따라서 linear projection을 할때 두배 크기로 늘림. 두배로 늘린 다음, 쪼개서 일반적인 transformer의 attention과 동일한 dimension 크기로 attention 수행함.
-            - $W^Q, W^K, W^V \in \mathbb{R}^{d_{\text {model }} \times 2 d}$: 각각 query, key, value vector에 projection 할 linear. 두개의 attention으로 쪼개야 해서 2d 으로 늘린다.
-            - $Q_1, Q_2, K_1, K_2 \in \mathbb{R}^{N \times d}, V \in \mathbb{R}^{N \times 2 d}$: Q1,K1는 첫번째 attention 연산, Q2, K2는 두번째 attention 연산. 각각 일반적인 transformer과 동일한 크기이기 때문에 dimension 크기 d이다. V의 경우 두개의 attentoin 연산에 각각 element-wise multiplication해야 하기 때문에 2d이다.
+            - $$W^Q, W^K, W^V \in \mathbb{R}^{d_{\text {model }} \times 2 d}$$: 각각 query, key, value vector에 projection 할 linear. 두개의 attention으로 쪼개야 해서 2d 으로 늘린다.
+            - $$Q_1, Q_2, K_1, K_2 \in \mathbb{R}^{N \times d}, V \in \mathbb{R}^{N \times 2 d}$$: Q1,K1는 첫번째 attention 연산, Q2, K2는 두번째 attention 연산. 각각 일반적인 transformer과 동일한 크기이기 때문에 dimension 크기 d이다. V의 경우 두개의 attentoin 연산에 각각 element-wise multiplication해야 하기 때문에 2d이다.
     
-    $$
+    $$$$
     \begin{gathered}{\left[Q_1 ; Q_2\right]=X W^Q, \quad\left[K_1 ; K_2\right]=X W^K, \quad V=X W^V} \\ \operatorname{DiffAttn}(X)=\left(\operatorname{softmax}\left(\frac{Q_1 K_1^T}{\sqrt{d}}\right)-\lambda \operatorname{softmax}\left(\frac{Q_2 K_2^T}{\sqrt{d}}\right)\right) V\end{gathered}
-    $$
+    $$$$
     
     - 일반적인 transformer과 마찬가지로 각각의 attention 연산에 각각 softmax해서 가중치를 몰아주고 정규화함. 2배로 늘린 V을 …? elementwise하면 같은 크기 되어서… d만 있으면 되는 것 아닌가?
     - 각각의 attention을 빼서 동일한 노이즈 값을 삭제한다. 삭제할 때 학습 가능한 가중치 lambda을 넣어서 최적값을 찾는다.
-    - $\lambda=\exp \left(\lambda_{\mathbf{q}_1} \cdot \lambda_{\mathbf{k}_1}\right)-\exp \left(\lambda_{\mathbf{q}_2} \cdot \lambda_{\mathbf{k}_2}\right)+\lambda_{\text {init }}$
-    - $\lambda_{\mathbf{q}_1}, \lambda_{\mathbf{k}_1}, \lambda_{\mathbf{q}_2}, \lambda_{\mathbf{k}_2} \in \mathbb{R}^d$
+    - $$\lambda=\exp \left(\lambda_{\mathbf{q}_1} \cdot \lambda_{\mathbf{k}_1}\right)-\exp \left(\lambda_{\mathbf{q}_2} \cdot \lambda_{\mathbf{k}_2}\right)+\lambda_{\text {init }}$$
+    - $$\lambda_{\mathbf{q}_1}, \lambda_{\mathbf{k}_1}, \lambda_{\mathbf{q}_2}, \lambda_{\mathbf{k}_2} \in \mathbb{R}^d$$
 
 ![image.png](/assets/src/DIFFERENTIAL TRANSFORMER/image.png)
 
